@@ -20,7 +20,11 @@ namespace DocumentApp.Domain
         public Guid Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public int PublishingYear { get; set; }
+        public PublicationType PublicationType { get; set; }
 
         public List<Author> Authors { get; set; } = new List<Author>();
+        public List<Index> Indices { get; set; } = new List<Index>();
+        public Conference? Conference { get; set; } 
+        public HashSet<string> KeyWords { get; set; } = new HashSet<string>();
     }
 }
