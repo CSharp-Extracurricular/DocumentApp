@@ -10,6 +10,7 @@ namespace DocumentApp.Domain
     {
         public Guid Id { get; set; }
         public Guid ObjectId { get; set; }
+
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string? PatronimicName { get; set; }
