@@ -23,7 +23,7 @@ namespace DocumentApp.Domain
         public PublicationType PublicationType { get; set; }
 
         public List<Author> Authors { get; set; } = new List<Author>();
-        public List<Index> Indices { get; set; } = new List<Index>();
+        public List<CitationIndex> Indices { get; set; } = new List<CitationIndex>();
         public Conference? Conference { get; set; } 
         public HashSet<string> KeyWords { get; set; } = new HashSet<string>();
     }

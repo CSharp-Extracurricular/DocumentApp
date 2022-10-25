@@ -14,10 +14,9 @@ namespace DocumentApp.Domain
         WebOfScience
     }
 
-    public class Index
+    public class CitationIndex
     {
         public Indexator Indexator { get; set; }
-        public int Citations { get; set; }
         public string URL { get; set; } = string.Empty;
     }
 }

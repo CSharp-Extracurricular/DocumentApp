@@ -19,4 +19,8 @@
     <ProjectReference Include="..\DocumentApp.Domain\DocumentApp.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repository\" />
+  </ItemGroup>
+
 </Project>
