@@ -15,6 +15,15 @@ namespace DocumentApp.Infrastructure.Repository
             }
         }
 
+        public async Task<Publication?> GetByIdAsync(Guid id)
+        {
+            return await _context.Publications
+                .Where(a => a.Id == id)
+                .Include(s => s.Authors)
+                .Include(b => b.Conference)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task AddAsync(Publication publication)
         {
             _context.Publications.Add(publication);
