@@ -16,6 +16,7 @@ namespace DocumentApp.Domain
 
     public class CitationIndex
     {
+        public Guid Id { get; set; }
         public Indexator Indexator { get; set; }
         public string URL { get; set; } = string.Empty;
     }

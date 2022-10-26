@@ -24,7 +24,6 @@ namespace DocumentApp.Domain
 
         public List<Author> Authors { get; set; } = new List<Author>();
         public List<CitationIndex> Indices { get; set; } = new List<CitationIndex>();
-        public Conference? Conference { get; set; } 
-        public HashSet<string> KeyWords { get; set; } = new HashSet<string>();
+        public Conference? Conference { get; set; }
     }
 }

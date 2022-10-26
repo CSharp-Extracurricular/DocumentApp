@@ -1,14 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DocumentApp.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace DocumentApp.Infrastructure
 {
-    public class PublicationContext : DbContext
+    public class Context : DbContext
     {
-        
+        public Context(DbContextOptions<Context> options) : base(options) { }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Publication>()
+                .HasOne(p => p.Conference)
+                .WithOne(b => b.Publication)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
+
+        public DbSet<Publication> Publications { get; set; } = null!;
     }
 }
