@@ -21,4 +21,10 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DocumentApp.API\DocumentApp.API.csproj" />
+    <ProjectReference Include="..\DocumentApp.Domain\DocumentApp.Domain.csproj" />
+    <ProjectReference Include="..\DocumentApp.Infrastructure\DocumentApp.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

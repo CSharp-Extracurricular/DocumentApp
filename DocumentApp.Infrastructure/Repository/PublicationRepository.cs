@@ -15,6 +15,11 @@ namespace DocumentApp.Infrastructure.Repository
             }
         }
 
+        public PublicationRepository(Context context)
+        {
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+        }
+
         public async Task<Publication?> GetByIdAsync(Guid id)
         {
             return await _context.Publications
