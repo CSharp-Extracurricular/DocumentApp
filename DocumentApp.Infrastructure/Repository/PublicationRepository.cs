@@ -1,7 +1,5 @@
 ﻿using DocumentApp.Domain;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Runtime.CompilerServices;
 
 namespace DocumentApp.Infrastructure
 {
