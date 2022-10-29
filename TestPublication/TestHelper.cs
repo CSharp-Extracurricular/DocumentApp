@@ -17,12 +17,6 @@ namespace TestPublication
             _context.Database.EnsureCreated();
         }
 
-        public PublicationRepository publicationRepository
-        {
-            get
-            {
-                return new PublicationRepository(_context);
-            }
-        }
+        public PublicationRepository TestRepository => new(_context);
     }
 }
