@@ -1,5 +1,6 @@
 ﻿using DocumentApp.Domain;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 
 namespace DocumentApp.Infrastructure
 {
@@ -25,6 +26,12 @@ namespace DocumentApp.Infrastructure
         public async Task<int> AddAsync(Publication publication)
         {
             _context.Publications.Add(publication);
+            return await _context.SaveChangesAsync();
+        }
+
+        public async Task<int> DeleteByIdAsync(Guid id)
+        {
+            _context.Publications.Remove(await _context.Publications.Where(a => a.Id == id).FirstOrDefaultAsync() ?? null!);
             return await _context.SaveChangesAsync();
         }
     }

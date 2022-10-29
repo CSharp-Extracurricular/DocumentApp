@@ -8,10 +8,11 @@ namespace TestPublication
         public TestHelper MainTestHelper = new();
         
         [Fact]
-        public async void TestAdditionAndSearch()
+        public async void MainTestSet()
         {
             Guid testGuid = await TestPublicationAddition();
             await TestPublicationAcquiring(testGuid);
+            await TestPublicationDeletion(testGuid);
         }
 
         
@@ -27,8 +28,6 @@ namespace TestPublication
 
             Assert.Equal(1, await MainTestRepository.AddAsync(publication));
             return publication.Id;
-
-
         }
         
         public async Task TestPublicationAcquiring(Guid testGuid)
@@ -40,6 +39,13 @@ namespace TestPublication
             Assert.Equal("Test", result.Title);
             Assert.Equal(PublicationType.Article, result.PublicationType);
             Assert.Equal(2022, result.PublishingYear);
+        }
+
+        public async Task TestPublicationDeletion(Guid testGuid)
+        {
+            PublicationRepository MainTestRepository = MainTestHelper.TestRepository;
+
+            Assert.Equal(1, await MainTestRepository.DeleteByIdAsync(testGuid));
         }
     }
 }
