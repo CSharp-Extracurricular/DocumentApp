@@ -1,24 +1,21 @@
 using DocumentApp.Domain;
-using DocumentApp.Infrastructure;
 
 namespace TestPublication
 {
     public class DatabaseTest
     {
         public TestHelper MainTestHelper = new();
-        
+
         [Fact]
-        public async void MainTestSet()
+        public async void TestAdditionSearchDeletion()
         {
-            Guid testGuid = await TestPublicationAddition();
-            await TestPublicationAcquiring(testGuid);
-            await TestPublicationDeletion(testGuid);
+            Guid id = await TestPublicationAddition();
+            await TestPublicationAcquiring(id);
+            await TestPublicationDeletion(id);
         }
 
-        
         public async Task<Guid> TestPublicationAddition()
         {
-            PublicationRepository MainTestRepository = MainTestHelper.TestRepository;
             Publication publication = new()
             {
                 Title = "Test",
@@ -26,26 +23,20 @@ namespace TestPublication
                 PublishingYear = 2022
             };
 
-            Assert.Equal(1, await MainTestRepository.AddAsync(publication));
+            Assert.Equal(1, await MainTestHelper.TestRepository.AddAsync(publication));
             return publication.Id;
         }
-        
-        public async Task TestPublicationAcquiring(Guid testGuid)
-        {
-            PublicationRepository MainTestRepository = MainTestHelper.TestRepository;
-            Publication? result = await MainTestRepository.GetByIdAsync(testGuid) ?? null!;
 
-            Assert.Equal(testGuid, result.Id);
+        public async Task TestPublicationAcquiring(Guid id)
+        {
+            Publication? result = await MainTestHelper.TestRepository.GetByIdAsync(id) ?? null!;
+
+            Assert.Equal(id, result.Id);
             Assert.Equal("Test", result.Title);
             Assert.Equal(PublicationType.Article, result.PublicationType);
             Assert.Equal(2022, result.PublishingYear);
         }
 
-        public async Task TestPublicationDeletion(Guid testGuid)
-        {
-            PublicationRepository MainTestRepository = MainTestHelper.TestRepository;
-
-            Assert.Equal(1, await MainTestRepository.DeleteByIdAsync(testGuid));
-        }
+        public async Task TestPublicationDeletion(Guid id) => Assert.Equal(1, await MainTestHelper.TestRepository.DeleteByIdAsync(id));
     }
 }
