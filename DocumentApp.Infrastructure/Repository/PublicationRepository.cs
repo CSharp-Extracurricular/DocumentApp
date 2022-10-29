@@ -6,13 +6,7 @@ namespace DocumentApp.Infrastructure
     public class PublicationRepository
     {
         private readonly Context _context;
-        public Context UnitOfWork
-        {
-            get
-            {
-                return _context;
-            }
-        }
+        public Context UnitOfWork => _context;
 
         public PublicationRepository(Context context)
         {
@@ -28,10 +22,10 @@ namespace DocumentApp.Infrastructure
                 .FirstOrDefaultAsync();
         }
 
-        public async Task AddAsync(Publication publication)
+        public async Task<int> AddAsync(Publication publication)
         {
             _context.Publications.Add(publication);
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync();
         }
     }
 }

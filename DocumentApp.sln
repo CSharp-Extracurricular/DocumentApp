@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentApp.Domain", "Docum
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentApp.Infrastructure", "DocumentApp.Infrastructure\DocumentApp.Infrastructure.csproj", "{A50D7B9B-E617-4C31-A6E0-E48BEEC668F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPublication", "TestPublication\TestPublication.csproj", "{5F3AAF25-89D1-4687-BEE7-50315B741DA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentApp.Tests", "TestPublication\DocumentApp.Tests.csproj", "{5F3AAF25-89D1-4687-BEE7-50315B741DA7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
