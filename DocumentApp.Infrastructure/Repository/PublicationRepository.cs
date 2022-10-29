@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace DocumentApp.Infrastructure.Repository
+namespace DocumentApp.Infrastructure
 {
     public class PublicationRepository
     {

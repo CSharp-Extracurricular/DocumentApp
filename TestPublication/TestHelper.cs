@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DocumentApp.Infrastructure;
-using DocumentApp.Infrastructure.Repository;
 
 namespace TestPublication
 {
