@@ -16,10 +16,7 @@ namespace DocumentApp.Tests
             await MainTestHelper.TestRepository.AddAsync(publication);
             Publication? result = await MainTestHelper.TestRepository.GetByIdAsync(publication.Id) ?? null!;
 
-            Assert.Equal(publication.Id, result.Id);
-            Assert.Equal(publication.Title, result.Title);
-            Assert.Equal(publication.PublicationType, result.PublicationType);
-            Assert.Equal(publication.PublishingYear, result.PublishingYear);
+            Assert.Equal(publication, result);
         }
 
         [Fact]
