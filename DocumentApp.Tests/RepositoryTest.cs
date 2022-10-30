@@ -54,7 +54,7 @@ namespace DocumentApp.Tests
             await TestRepository.UpdateAsync(publication);
             Publication result = await TestRepository.GetByIdAsync(publication.Id) ?? null!;
 
-            Assert.Equal(publication.Title, result.Title);
+            Assert.Equal(publication, result);
         }
 
         private static Publication GetTestPublication()
