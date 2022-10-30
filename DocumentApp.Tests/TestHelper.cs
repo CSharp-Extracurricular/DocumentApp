@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DocumentApp.Infrastructure;
 
-namespace TestPublication
+namespace DocumentApp.Tests
 {
     public class TestHelper
     {
@@ -9,12 +9,7 @@ namespace TestPublication
         public TestHelper()
         {
             var builder = new DbContextOptionsBuilder<Context>();
-
-            // Вариант для тестирования на изолированной копии базы данных:
-            // builder.UseInMemoryDatabase(databaseName: "DocumentApp");
-
-            // Вариант для тестирования на реальной базе данных:
-            builder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=DocumentApp;Integrated Security=true");
+            builder.UseInMemoryDatabase(databaseName: "DocumentApp");
 
             var dbContextOptions = builder.Options;
             _context = new Context(dbContextOptions);
