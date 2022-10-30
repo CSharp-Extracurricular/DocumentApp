@@ -1,4 +1,5 @@
 using DocumentApp.Domain;
+using System.Collections.Generic;
 
 namespace DocumentApp.Tests
 {
@@ -31,14 +32,16 @@ namespace DocumentApp.Tests
         [Fact] 
         public async void TestGetAllAsync()
         {
-            Publication first = GetTestPublication();
-            Publication second = GetTestPublication();
+            Random random = new();
+            List<Publication> publications = new();
 
-            await MainTestHelper.TestRepository.AddAsync(first);
-            await MainTestHelper.TestRepository.AddAsync(second);
-            List<Publication> publications = await MainTestHelper.TestRepository.GetAllAsync();
+            for (int i = 0; i < random.Next(2,10); i++) publications.Add(GetTestPublication());
 
-            Assert.True(publications.Contains(first) && publications.Contains(second));
+            foreach (Publication i in publications) await MainTestHelper.TestRepository.AddAsync(i);
+
+            List<Publication> results = await MainTestHelper.TestRepository.GetAllAsync();
+
+            foreach (Publication i in publications) Assert.Contains(i, results);
         }
 
         [Fact]
