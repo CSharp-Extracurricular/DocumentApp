@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DocumentApp.Infrastructure;
-using DocumentApp.Infrastructure.Repository;
 
-namespace TestPublication
+namespace DocumentApp.Tests
 {
     public class TestHelper
     {
@@ -18,12 +17,6 @@ namespace TestPublication
             _context.Database.EnsureCreated();
         }
 
-        public PublicationRepository publicationRepository
-        {
-            get
-            {
-                return new PublicationRepository(_context);
-            }
-        }
+        public PublicationRepository TestRepository => new(_context);
     }
 }

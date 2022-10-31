@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentApp.Domain", "Docum
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentApp.Infrastructure", "DocumentApp.Infrastructure\DocumentApp.Infrastructure.csproj", "{A50D7B9B-E617-4C31-A6E0-E48BEEC668F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPublication", "TestPublication\TestPublication.csproj", "{5F3AAF25-89D1-4687-BEE7-50315B741DA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentApp.Tests", "DocumentApp.Tests\DocumentApp.Tests.csproj", "{5A538BDE-E9BD-43B9-B777-6AAA20B418BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{A50D7B9B-E617-4C31-A6E0-E48BEEC668F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A50D7B9B-E617-4C31-A6E0-E48BEEC668F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A50D7B9B-E617-4C31-A6E0-E48BEEC668F3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5F3AAF25-89D1-4687-BEE7-50315B741DA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5F3AAF25-89D1-4687-BEE7-50315B741DA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5F3AAF25-89D1-4687-BEE7-50315B741DA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5F3AAF25-89D1-4687-BEE7-50315B741DA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A538BDE-E9BD-43B9-B777-6AAA20B418BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A538BDE-E9BD-43B9-B777-6AAA20B418BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A538BDE-E9BD-43B9-B777-6AAA20B418BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A538BDE-E9BD-43B9-B777-6AAA20B418BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
