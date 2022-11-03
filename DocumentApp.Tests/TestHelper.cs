@@ -6,6 +6,7 @@ namespace DocumentApp.Tests
     public class TestHelper
     {
         private readonly Context _context;
+
         public TestHelper()
         {
             var builder = new DbContextOptionsBuilder<Context>();

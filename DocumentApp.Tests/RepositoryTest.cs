@@ -4,7 +4,7 @@ namespace DocumentApp.Tests
 {
     public class RepositoryTest
     {
-        public TestHelper MainTestHelper = new();
+        public readonly TestHelper MainTestHelper = new();
 
         private Infrastructure.PublicationRepository TestRepository => MainTestHelper.TestRepository;
 
@@ -52,7 +52,7 @@ namespace DocumentApp.Tests
             await TestRepository.AddAsync(publication);
             publication.Title = Guid.NewGuid().ToString();
             await TestRepository.UpdateAsync(publication);
-            Publication result = await TestRepository.GetByIdAsync(publication.Id) ?? null!;
+            Publication? result = await TestRepository.GetByIdAsync(publication.Id) ?? null!;
 
             Assert.Equal(publication, result);
         }
