@@ -11,7 +11,7 @@ namespace DocumentApp.Tests
         {
             var builder = new DbContextOptionsBuilder<Context>();
             builder.UseInMemoryDatabase(databaseName: "DocumentApp");
-            
+
             var dbContextOptions = builder.Options;
             _context = new Context(dbContextOptions);
             _context.Database.EnsureDeleted();

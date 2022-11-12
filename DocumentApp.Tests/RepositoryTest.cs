@@ -18,10 +18,7 @@ namespace DocumentApp.Tests
             await TestRepository.AddAsync(publication);
             Publication? result = await TestRepository.GetByIdAsync(publication.Id) ?? null!;
 
-            Assert.Equal(publication, result);
-            Assert.Equal(publication.Authors, result.Authors);
-            Assert.Equal(publication.Indices, result.Indices);
-            Assert.Equal(publication.Conference, result.Conference);
+            ComparePublications(publication, result);
         }
 
         [Fact]
@@ -58,11 +55,7 @@ namespace DocumentApp.Tests
             await TestRepository.UpdateAsync(publication);
 
             Publication? result = await TestRepository.GetByIdAsync(publication.Id) ?? null!;
-
-            Assert.Equal(publication, result);
-            Assert.Equal(publication.Authors, result.Authors);
-            Assert.Equal(publication.Indices, result.Indices);
-            Assert.Equal(publication.Conference, result.Conference);
+            ComparePublications(publication, result);
 
             for (int i = 0; i < 2; i++)
             {
@@ -73,7 +66,11 @@ namespace DocumentApp.Tests
             publication.Conference = GetTestConference();
 
             result = await TestRepository.GetByIdAsync(publication.Id) ?? null!;
+            ComparePublications(publication, result);
+        }
 
+        private static void ComparePublications(Publication publication, Publication result)
+        {
             Assert.Equal(publication, result);
             Assert.Equal(publication.Authors, result.Authors);
             Assert.Equal(publication.Indices, result.Indices);
