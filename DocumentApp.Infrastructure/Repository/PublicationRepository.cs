@@ -11,13 +11,19 @@ namespace DocumentApp.Infrastructure
 
         public PublicationRepository(Context context) => _context = context ?? throw new ArgumentNullException(nameof(context));
 
-        public async Task<List<Publication>> GetAllAsync() => await _context.Publications.OrderBy(p => p.Title).ToListAsync();
+        public async Task<List<Publication>?> GetAllAsync() => await _context.Publications
+            .Include(s => s.Authors)
+            .Include(s => s.Indices)
+            .Include(s => s.Conference)
+            .OrderBy(p => p.Title)
+            .ToListAsync();
 
         public async Task<Publication?> GetByIdAsync(Guid id) => await _context.Publications
-                .Where(a => a.Id == id)
-                .Include(s => s.Authors)
-                .Include(b => b.Conference)
-                .FirstOrDefaultAsync();
+            .Where(a => a.Id == id)
+            .Include(s => s.Authors)
+            .Include(s => s.Indices)
+            .Include(s => s.Conference)
+            .FirstOrDefaultAsync();
 
         public async Task<int> AddAsync(Publication publication)
         {
@@ -33,8 +39,11 @@ namespace DocumentApp.Infrastructure
 
         public async Task<int> UpdateAsync(Publication publication)
         {
-            Publication? tempPublication = await _context.Publications.FindAsync(publication.Id) ?? null!;
+            Publication tempPublication = await _context.Publications.FindAsync(publication.Id)
+                ?? throw new NullReferenceException("Publication not found");
+
             _context.Entry(tempPublication).CurrentValues.SetValues(publication);
+
             return await _context.SaveChangesAsync();
         }
     }
