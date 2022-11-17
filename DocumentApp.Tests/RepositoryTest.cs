@@ -1,4 +1,6 @@
+using DocumentApp.Infrastructure;
 using DocumentApp.Domain;
+using System;
 
 namespace DocumentApp.Tests
 {
@@ -6,7 +8,7 @@ namespace DocumentApp.Tests
     {
         public readonly TestHelper MainTestHelper = new();
 
-        private Infrastructure.PublicationRepository TestRepository => MainTestHelper.TestRepository;
+        private PublicationRepository TestRepository => MainTestHelper.TestRepository;
 
         [Fact]
         public async void TestAddAsync() => Assert.NotEqual(0, await TestRepository.AddAsync(GetTestPublication()));
@@ -30,7 +32,7 @@ namespace DocumentApp.Tests
             Assert.NotEqual(0, await TestRepository.DeleteByIdAsync(publication.Id));
         }
 
-        [Fact] 
+        [Fact]
         public async void TestGetAllAsync()
         {
             Random random = new();
@@ -50,60 +52,123 @@ namespace DocumentApp.Tests
         {
             Publication publication = GetTestPublication();
             await TestRepository.AddAsync(publication);
-
             publication.Title = Guid.NewGuid().ToString();
+
             await TestRepository.UpdateAsync(publication);
 
             Publication? result = await TestRepository.GetByIdAsync(publication.Id) ?? null!;
             ComparePublications(publication, result);
+        }
 
-            for (int i = 0; i < 2; i++)
+        //[Fact]
+        //public async void TestUpdateAddAsync()
+        //{
+        //    //Publication publication2 = GetTestPublication();
+        //    //_ = TestRepository.AddAsync(publication2).Result;
+        //    //publication.Title = Guid.NewGuid().ToString();
+
+
+
+        //    //Publication publication = await TestRepository.GetByIdAsync(publication2.Id)
+        //    //    ?? throw new NullReferenceException("Publication not found");
+        //    //publication.Title = "Test TestUpdateAddAsync";
+
+
+        //    ////for (int i = 0; i < 1; i++)
+        //    ////{
+        //    ////    var author = GetTestAuthor();
+        //    ////    author.Number = 2;
+        //    ////    publication.Authors.Add(author);
+        //    ////    //publication.CitationIndices.Add(GetTestCitationIndex());
+        //    ////}
+
+        //    var author = GetTestAuthor();
+        //    author.Number = 2;
+        //    publication.Authors.Add(author);
+
+        //    //publication.Conference = GetTestConference();
+
+        //    await TestRepository.UpdateAsync(publication);
+
+        //    Publication? result = await TestRepository.GetByIdAsync(publication.Id) ?? null!;
+        //    ComparePublications(publication, result);
+        //}
+
+        [Fact]
+        public async void TestUpdateAddAsync()
+        {
+            var testGuid = "10000000-0000-0000-0000-000000000000";
+            var testGuid2 = "20000000-0000-0000-0000-000000000000";
+            Publication publication = new Publication
             {
-                publication.Authors.Add(GetTestAuthor());
-                publication.Indices.Add(GetTestCitationIndex());
-            }
+                Id = new Guid(testGuid),
+                Title = "Test title",
+                PublicationType = PublicationType.Article
+            };
 
-            publication.Conference = GetTestConference();
+            TestRepository.AddAsync(publication).Wait();
 
-            result = await TestRepository.GetByIdAsync(publication.Id) ?? null!;
-            ComparePublications(publication, result);
+            var author = new Author
+            {
+                Id = new Guid(testGuid2),
+                Number = 1,
+                FirstName = "Test",
+                LastName = "Test"
+            };
+
+            var publication2 = new Publication
+            {
+                Id = new Guid(testGuid),
+                Title = "2 Test title",
+                PublicationType = PublicationType.Article
+            };
+            
+            publication2.Authors.Add(author);
+
+            TestRepository.UpdateAsync(publication2).Wait();
+
+            Publication? result = TestRepository.GetByIdAsync(publication2.Id).Result ?? null!;
+            //ComparePublications(publication2, result);
+            Assert.Single(result.Authors);
+
         }
 
         private static void ComparePublications(Publication publication, Publication result)
         {
-            Assert.Equal(publication, result);
+            //Assert.Equal(publication, result);
             Assert.Equal(publication.Authors, result.Authors);
-            Assert.Equal(publication.Indices, result.Indices);
-            Assert.Equal(publication.Conference, result.Conference);
+            //Assert.Equal(publication.CitationIndices, result.CitationIndices);
+            //Assert.Equal(publication.Conference, result.Conference);
         }
+
+        //static Random random = new();
 
         private static Publication GetTestPublication()
         {
-            Random random = new();
-
             Publication publication = new()
             {
                 Id = Guid.NewGuid(),
                 Title = Guid.NewGuid().ToString(),
-                PublicationType = (PublicationType)random.Next(0, 4),
-                PublishingYear = random.Next(1990, 2022)
+                //PublicationType = (PublicationType)random.Next(0, 4),
+                PublicationType = PublicationType.Article,
+                //PublishingYear = random.Next(1990, 2022)
+                PublishingYear = 1990
             };
 
-            for (int i = 0, j = random.Next(2, 4); i < j; i++)
+            int cnt = 1;
+            for (int i = 0; i < cnt; i++)
             {
                 publication.Authors.Add(GetTestAuthor());
-                publication.Indices.Add(GetTestCitationIndex());
+                //publication.CitationIndices.Add(GetTestCitationIndex());
             }
 
-            publication.Conference = GetTestConference();
+            //publication.Conference = GetTestConference();
 
             return publication;
         }
 
         private static Author GetTestAuthor()
         {
-            Random random = new();
-
             return new Author()
             {
                 Id = Guid.NewGuid(),
@@ -111,14 +176,12 @@ namespace DocumentApp.Tests
                 FirstName = Guid.NewGuid().ToString(),
                 LastName = Guid.NewGuid().ToString(),
                 PatronimicName = Guid.NewGuid().ToString(),
-                Number = random.Next(0, 10)
+                Number = 1
             };
         }
 
         private static Conference GetTestConference()
         {
-            Random random = new();
-
             return new Conference()
             {
                 Id = Guid.NewGuid(),
@@ -126,19 +189,17 @@ namespace DocumentApp.Tests
                 FullName = Guid.NewGuid().ToString(),
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now,
-                Type = (ConferenceType)random.Next(0, 3),
+                Type = (ConferenceType.International),
                 Location = Guid.NewGuid().ToString()
             };
         }
 
         private static CitationIndex GetTestCitationIndex()
         {
-            Random random = new();
-
             return new CitationIndex()
             {
                 Id = Guid.NewGuid(),
-                Indexator = (Indexator)random.Next(0, 3),
+                Indexator = (Indexator.ELibrary),
                 URL = Guid.NewGuid().ToString()
             };
         }
