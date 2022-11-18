@@ -1,43 +1,79 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using DocumentApp.Infrastructure;
+using DocumentApp.Domain;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-namespace DocumentApp.API.Controllers
+namespace DocumentApp.API
 {
     [Route("api/[controller]")]
     [ApiController]
     public class PublicationsController : ControllerBase
     {
-        // GET: api/<PublicationsController>
+        private readonly Context _context;
+        private readonly PublicationRepository _publicationRepository;
+
+        public PublicationsController(Context context)
+        {
+            _context = context;
+            _publicationRepository = new PublicationRepository(_context);
+        }
+
+        // GET: api/Publication
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ActionResult<IEnumerable<Publication>>> GetPublications()
         {
-            return new string[] { "value1", "value2" };
+            //return await _context.Publications.ToListAsync();
+            return await _publicationRepository.GetAllAsync();
         }
 
-        // GET api/<PublicationsController>/5
+        // GET: api/Publication/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<Publication>> GetPublication(Guid id)
         {
-            return "value";
+            var publication = await _context.Publications.FindAsync(id);
+            //var publication = await _publicationRepository.GetByIdAsync(id);
+            if (publication == null)
+            {
+                return NotFound();
+            }
+            return publication;
         }
 
-        // POST api/<PublicationsController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<PublicationsController>/5
+        // PUT: api/Publication/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> PutPublication(Guid id, Publication publication)
         {
+            if (id != publication.Id)
+            {
+                return BadRequest();
+            }
+            await _publicationRepository.UpdateAsync(publication);
+
+            return NoContent();
         }
 
-        // DELETE api/<PublicationsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        // POST: api/Publication
+        [HttpPost]
+        public async Task<ActionResult<Publication>> PostPublications(Publication publication)
         {
+            await _publicationRepository.AddAsync(publication);
+            return CreatedAtAction("GetPublications", new { id = publication.Id }, publication);
+        }
+
+        // DELETE: api/Publication/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePublication(Guid id)
+        {
+            var publication = await _publicationRepository.GetByIdAsync(id);
+            if (publication == null)
+            {
+                return NotFound();
+            }
+
+            _context.Publications.Remove(publication);
+            await _context.SaveChangesAsync();
+            //await _publicationRepository.DeleteAsync(id);
+
+            return NoContent();
         }
     }
 }
