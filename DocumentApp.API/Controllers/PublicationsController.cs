@@ -20,7 +20,7 @@ namespace DocumentApp.API.Controllers
 
         // GET: api/Publication
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Publication>>> GetPublications()
+        public async Task<ActionResult<IEnumerable<Publication>?>> GetPublications()
         {
             //return await _context.Publications.ToListAsync();
             return await _publicationRepository.GetAllAsync();

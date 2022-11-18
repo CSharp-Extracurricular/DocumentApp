@@ -1,4 +1,6 @@
-﻿namespace DocumentApp.Domain
+﻿using System.Text.Json.Serialization;
+
+namespace DocumentApp.Domain
 {
     public class Author : IIdentifiableT
     {
@@ -11,6 +13,7 @@
         public int Number { get; set; }
 
         public Guid PublicationId { get; set; }
-        public Publication Publication { get; set; } = null!;
+
+        [JsonIgnore] public Publication Publication { get; set; } = null!;
     }
 }
