@@ -8,7 +8,7 @@
         WebOfScience
     }
 
-    public class CitationIndex
+    public class CitationIndex : IIdentifiableT
     {
         public Guid Id { get; set; }
         public Indexator Indexator { get; set; }

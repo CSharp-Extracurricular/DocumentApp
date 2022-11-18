@@ -151,7 +151,7 @@ namespace DocumentApp.Infrastructure.Migrations
             modelBuilder.Entity("DocumentApp.Domain.CitationIndex", b =>
                 {
                     b.HasOne("DocumentApp.Domain.Publication", null)
-                        .WithMany("Indices")
+                        .WithMany("CitationIndices")
                         .HasForeignKey("PublicationId");
                 });
 
@@ -169,9 +169,9 @@ namespace DocumentApp.Infrastructure.Migrations
                 {
                     b.Navigation("Authors");
 
-                    b.Navigation("Conference");
+                    b.Navigation("CitationIndices");
 
-                    b.Navigation("Indices");
+                    b.Navigation("Conference");
                 });
 #pragma warning restore 612, 618
         }

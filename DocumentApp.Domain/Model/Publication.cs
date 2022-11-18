@@ -9,7 +9,7 @@
         Thesis
     }
 
-    public class Publication
+    public class Publication : IIdentifiableT
     {
         public Guid Id { get; set; }
         public string Title { get; set; } = string.Empty;
@@ -17,7 +17,7 @@
         public PublicationType PublicationType { get; set; }
 
         public List<Author> Authors { get; set; } = new List<Author>();
-        public List<CitationIndex> Indices { get; set; } = new List<CitationIndex>();
+        public List<CitationIndex> CitationIndices { get; set; } = new List<CitationIndex>();
         public Conference? Conference { get; set; }
     }
 }

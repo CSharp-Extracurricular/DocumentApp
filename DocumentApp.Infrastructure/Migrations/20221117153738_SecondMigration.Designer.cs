@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DocumentApp.Infrastructure.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20221026160236_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20221117153738_SecondMigration")]
+    partial class SecondMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -153,7 +153,7 @@ namespace DocumentApp.Infrastructure.Migrations
             modelBuilder.Entity("DocumentApp.Domain.CitationIndex", b =>
                 {
                     b.HasOne("DocumentApp.Domain.Publication", null)
-                        .WithMany("Indices")
+                        .WithMany("CitationIndices")
                         .HasForeignKey("PublicationId");
                 });
 
@@ -171,9 +171,9 @@ namespace DocumentApp.Infrastructure.Migrations
                 {
                     b.Navigation("Authors");
 
-                    b.Navigation("Conference");
+                    b.Navigation("CitationIndices");
 
-                    b.Navigation("Indices");
+                    b.Navigation("Conference");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,11 +8,11 @@ namespace DocumentApp.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class Controller : ControllerBase
+    public class PublicationsController : ControllerBase
     {
         private readonly Context _context;
         private readonly PublicationRepository _publicationRepository;
-        public Controller(Context context)
+        public PublicationsController(Context context)
         {
             _context = context;
             _publicationRepository = new PublicationRepository(_context);
@@ -28,10 +28,10 @@ namespace DocumentApp.API.Controllers
 
         // GET: api/Publication/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Publication>> GetPublication(int id)
+        public async Task<ActionResult<Publication>> GetPublication(Guid id)
         {
-            var publication = await _context.Publications.FindAsync(id);
-            //var publication = await _publicationRepository.GetByIdAsync(id);
+            //var publication = await _context.Publications.FindAsync(id);
+            var publication = await _publicationRepository.GetByIdAsync(id);
             if (publication == null)
             {
                 return NotFound();
@@ -42,7 +42,7 @@ namespace DocumentApp.API.Controllers
         // PUT: api/Publication/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPublication(int id, Publication publication)
+        public async Task<IActionResult> PutPublication(Guid id, Publication publication)
         {
             if (id != publication.Id)
             {
@@ -64,7 +64,7 @@ namespace DocumentApp.API.Controllers
 
         // DELETE: api/Publication/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePublication(long id)
+        public async Task<IActionResult> DeletePublication(Guid id)
         {
             var publication = await _publicationRepository.GetByIdAsync(id);
             if (publication == null)
@@ -79,9 +79,9 @@ namespace DocumentApp.API.Controllers
             return NoContent();
         }
 
-        //private bool PublicationExists(int id)
-        //{
-        //    return _context.Publications.Any(e => e.Id == id);
-        //}
+        private bool PublicationExists(Guid id)
+        {
+            return _context.Publications.Any(e => e.Id == id);
+        }
     }
 }
