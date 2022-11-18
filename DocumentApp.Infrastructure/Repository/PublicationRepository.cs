@@ -1,6 +1,5 @@
 ﻿using DocumentApp.Domain;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.Contracts;
 
 namespace DocumentApp.Infrastructure
 {
