@@ -8,7 +8,7 @@
         International
     }
 
-    public class Conference
+    public class Conference : IIdentifiableT
     {
         public Guid Id { get; set; }
         public string ShortName { get; set; } = string.Empty;

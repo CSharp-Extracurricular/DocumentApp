@@ -1,6 +1,6 @@
 ﻿namespace DocumentApp.Domain
 {
-    public class Author
+    public class Author : IIdentifiableT
     {
         public Guid Id { get; set; }
         public Guid ObjectId { get; set; }

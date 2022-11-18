@@ -1,13 +1,12 @@
 ﻿using DocumentApp.Domain;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Contracts;
 
 namespace DocumentApp.Infrastructure
 {
     public class PublicationRepository
     {
         private readonly Context _context;
-
-        public void CloseConnection() => _context.Dispose();
 
         public Context UnitOfWork => _context;
 
@@ -41,42 +40,35 @@ namespace DocumentApp.Infrastructure
 
         public async Task<int> UpdateAsync(Publication publication)
         {
-            Publication tempPublication = await GetByIdAsync(publication.Id)
-                ?? throw new NullReferenceException("Publication not found");
+            await EnsureEntryCollectionInContext(publication.Authors);
+            await EnsureEntryCollectionInContext(publication.CitationIndices);
 
-            _context.Entry(tempPublication).CurrentValues.SetValues(publication);
-
-            foreach (Author author in publication.Authors)
+            if (publication.Conference != null)
             {
-                Author? tempAuthor = tempPublication.Authors.FirstOrDefault(p => p.Id == author.Id);
+                Conference? tempConference = await _context.FindAsync<Conference>(publication.Conference.Id);
 
-                if (tempAuthor == null)
+                if (tempConference == null)
                 {
-                    tempPublication.Authors.Add(author);    
-                }
-                else
-                {
-                    _context.Entry(tempAuthor).CurrentValues.SetValues(author);
+                    _context.Add(publication.Conference);
                 }
             }
 
-            //foreach (CitationIndex index in publication.CitationIndices)
-            //{
-            //    CitationIndex? tempIndex = tempPublication.CitationIndices.FirstOrDefault(p => p.Id == index.Id);
+            _context.Update(publication);
 
-            //    if (tempIndex == null)
-            //    {
-            //        tempPublication.CitationIndices.Add(index);
-            //    }
-            //    else
-            //    {
-            //        _context.Entry(tempIndex).CurrentValues.SetValues(index);
-            //    }
-            //}
+            return await _context.SaveChangesAsync();
+        }
 
-            int changedEntriesCount = await _context.SaveChangesAsync();
+        private async Task EnsureEntryCollectionInContext<T>(List<T> collection) where T : class, IIdentifiableT
+        {
+            foreach (T entry in collection)
+            {
+                T? existingEntry = await _context.FindAsync<T>(entry.Id);
 
-            return changedEntriesCount;
+                if (existingEntry == null)
+                {
+                    _context.Add(entry);
+                }
+            }
         }
     }
 }
