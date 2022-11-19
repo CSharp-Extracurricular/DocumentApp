@@ -48,7 +48,11 @@ namespace DocumentApp.Infrastructure
 
                 if (tempConference == null)
                 {
-                    _context.Add(publication.Conference);
+                    await _context.AddAsync(publication.Conference);
+                }
+                else
+                {
+                    _context.Update(publication.Conference);
                 }
             }
 
@@ -65,7 +69,11 @@ namespace DocumentApp.Infrastructure
 
                 if (existingEntry == null)
                 {
-                    _context.Add(entry);
+                    await _context.AddAsync(entry);
+                }
+                else
+                {
+                    _context.Update(entry);
                 }
             }
         }
