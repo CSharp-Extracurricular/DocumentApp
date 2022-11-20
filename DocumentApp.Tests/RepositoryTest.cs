@@ -74,6 +74,8 @@ namespace DocumentApp.Tests
                 publication.CitationIndices.Add(GetTestCitationIndex());
             }
 
+            publication.Authors[0] = GetTestAuthor();
+            publication.CitationIndices[0] = GetTestCitationIndex();
             publication.Conference = GetTestConference();
 
             await TestRepository.UpdateAsync(publication);

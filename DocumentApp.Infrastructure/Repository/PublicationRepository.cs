@@ -39,17 +39,12 @@ namespace DocumentApp.Infrastructure
 
         public async Task<int> UpdateAsync(Publication publication)
         {
-            await EnsureEntryCollectionInContext(publication.Authors);
-            await EnsureEntryCollectionInContext(publication.CitationIndices);
+            await EnsureEntryInContext(publication.Authors);
+            await EnsureEntryInContext(publication.CitationIndices);
 
             if (publication.Conference != null)
             {
-                Conference? tempConference = await _context.FindAsync<Conference>(publication.Conference.Id);
-
-                if (tempConference == null)
-                {
-                    _context.Add(publication.Conference);
-                }
+                await EnsureEntryInContext(publication.Conference);
             }
 
             _context.Update(publication);
@@ -57,16 +52,25 @@ namespace DocumentApp.Infrastructure
             return await _context.SaveChangesAsync();
         }
 
-        private async Task EnsureEntryCollectionInContext<T>(List<T> collection) where T : class, IIdentifiableT
+        private async Task EnsureEntryInContext<T>(T entry) where T : class, IIdentifiableT
         {
-            foreach (T entry in collection)
-            {
-                T? existingEntry = await _context.FindAsync<T>(entry.Id);
+            T? existingEntry = await _context.FindAsync<T>(entry.Id);
 
-                if (existingEntry == null)
-                {
-                    _context.Add(entry);
-                }
+            if (existingEntry == null)
+            {
+                await _context.AddAsync(entry);
+            }
+            else
+            {
+                _context.Update(entry);
+            }
+        }
+
+        private async Task EnsureEntryInContext<T>(List<T> entry) where T : class, IIdentifiableT
+        {
+            foreach (T element in entry)
+            {
+                await EnsureEntryInContext(element);
             }
         }
     }
