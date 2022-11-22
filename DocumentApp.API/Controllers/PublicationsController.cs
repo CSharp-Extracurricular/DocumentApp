@@ -43,10 +43,14 @@ namespace DocumentApp.API.Controllers
             {
                 return BadRequest();
             }
+
+            if (!PublicationExists(id))
+            {
+                return NotFound();
+            }
             
             await _publicationRepository.UpdateAsync(publication);
-            
-            return Ok();
+            return NoContent();
         }
 
         // POST: api/Publication
@@ -61,13 +65,11 @@ namespace DocumentApp.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePublication(Guid id)
         {
-            Publication? publication = await _publicationRepository.GetByIdAsync(id);
-
-            if (publication == null)
+            if (!PublicationExists(id))
             {
-                return NotFound();
+                return NotFound(id);
             }
-
+            
             await _publicationRepository.DeleteByIdAsync(id);
 
             return NoContent();
