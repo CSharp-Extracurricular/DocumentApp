@@ -11,7 +11,7 @@ namespace DocumentApp.Infrastructure
 
         public PublicationRepository(Context context) => _context = context ?? throw new ArgumentNullException(nameof(context));
 
-        public async Task<List<Publication>?> GetAllAsync() => await _context.Publications
+        public async Task<List<Publication>> GetAllAsync() => await _context.Publications
             .Include(s => s.Authors)
             .Include(s => s.CitationIndices)
             .Include(s => s.Conference)
