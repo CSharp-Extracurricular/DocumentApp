@@ -19,7 +19,19 @@ namespace DocumentApp.API.Controllers
 
         // GET: api/Publication
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Publication>?>> GetPublications() => await _publicationRepository.GetAllAsync();
+        public async Task<ActionResult<IEnumerable<Publication>>> GetPublications() => await _publicationRepository.GetAllAsync();
+
+        // GET: api/Publication/filter/year/5
+        [HttpGet("filter/year/{year}")]
+        public async Task<ActionResult<IEnumerable<Publication>?>> FilterPublicationsByYear(int year) => await _publicationRepository.GetAllAsyncFilterWith(PublicationFilter.HasSame(year));
+
+        // GET: api/Publication/filter/type/5
+        [HttpGet("filter/type/{type}")]
+        public async Task<ActionResult<IEnumerable<Publication>?>> FilterPublicationsByType(PublicationType type) => await _publicationRepository.GetAllAsyncFilterWith(PublicationFilter.HasSame(type));
+
+        // GET: api/Publication/filter/author/
+        [HttpGet("filter/type/{author}")]
+        public async Task<ActionResult<IEnumerable<Publication>?>> FilterPublicationsByType(Author author) => await _publicationRepository.GetAllAsyncFilterWith(PublicationFilter.HasSame(author));
 
         // GET: api/Publication/5
         [HttpGet("{id}")]
