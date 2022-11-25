@@ -1,5 +1,6 @@
 ﻿using DocumentApp.Domain;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
 using System.Linq.Expressions;
 
 namespace DocumentApp.Infrastructure
@@ -18,13 +19,41 @@ namespace DocumentApp.Infrastructure
             .OrderBy(p => p.Title)
             .ToListAsync();
 
-        public async Task<List<Publication>?> GetAllAsyncFilterWith(Expression<Func<Publication, bool>> PublicationMatchesFilter) => await _context.Publications
-            .Where(PublicationMatchesFilter)
+        //public async Task<List<Publication>?> GetAllAsyncFilterWith(Expression<Func<Publication, bool>> PublicationMatchesFilter) => await _context.Publications
+        //    .Where(PublicationMatchesFilter)
+        //    .Include(s => s.Authors)
+        //    .Include(s => s.CitationIndices)
+        //    .Include(s => s.Conference)
+        //    .OrderBy(p => p.Title)
+        //    .ToListAsync();
+
+        private IEnumerable<Publication> GetAllAsIEnumerable() => _context.Publications
             .Include(s => s.Authors)
             .Include(s => s.CitationIndices)
             .Include(s => s.Conference)
-            .OrderBy(p => p.Title)
-            .ToListAsync();
+            .OrderBy(p => p.Title);
+
+        public List<Publication> GetAllAsyncFiltered(PublicationQuery query)
+        {
+            var result = GetAllAsIEnumerable();
+
+            if (query.StartYear != null)
+            {
+                result = result.Where(a => a.PublishingYear >= query.StartYear);
+            }
+
+            if (query.EndYear != null)
+            {
+                result = result.Where(a => a.PublishingYear <= query.EndYear);
+            }
+
+            if (query.PublicationType != null)
+            {
+                result = result.Where(a => a.PublicationType == query.PublicationType);
+            }
+
+            return result.ToList();
+        }
 
         public async Task<Publication?> GetByIdAsync(Guid id) => await _context.Publications
             .Where(a => a.Id == id)

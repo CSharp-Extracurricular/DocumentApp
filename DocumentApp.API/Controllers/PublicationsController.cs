@@ -22,12 +22,20 @@ namespace DocumentApp.API.Controllers
         public async Task<ActionResult<IEnumerable<Publication>>> GetPublications() => await _publicationRepository.GetAllAsync();
 
         // GET: api/Publication/filter/year/5
-        [HttpGet("filter/year/{year}")]
-        public async Task<ActionResult<IEnumerable<Publication>?>> FilterPublicationsByYear(int year) => await _publicationRepository.GetAllAsyncFilterWith(PublicationFilter.HasSame(year));
+        //[HttpGet("filter/year/{year}")]
+        //public async Task<ActionResult<IEnumerable<Publication>?>> FilterPublicationsByYear(int year) => await _publicationRepository
+        //    .GetAllAsyncFilterWith(PublicationFilter.HasSame(year));
 
         // GET: api/Publication/filter/type/5
-        [HttpGet("filter/type/{type}")]
-        public async Task<ActionResult<IEnumerable<Publication>?>> FilterPublicationsByType(PublicationType type) => await _publicationRepository.GetAllAsyncFilterWith(PublicationFilter.HasSame(type));
+        //[HttpGet("filter/type/{type}")]
+        //public async Task<ActionResult<IEnumerable<Publication>?>> FilterPublicationsByType(PublicationType type) => await _publicationRepository
+        //    .GetAllAsyncFilterWith(PublicationFilter.HasSame(type));
+
+        [HttpGet("filter_test/{query}")]
+        public ActionResult<IEnumerable<Publication>> PublicationFilter(PublicationQuery query)
+        {
+            return _publicationRepository.GetAllAsyncFiltered(query);
+        }
         
         // GET: api/Publication/5
         [HttpGet("{id}")]
