@@ -1,17 +1,25 @@
 ﻿using DocumentApp.Domain;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace DocumentApp.Infrastructure
 {
     public class PublicationRepository
     {
         private readonly Context _context;
-
         public Context UnitOfWork => _context;
 
         public PublicationRepository(Context context) => _context = context ?? throw new ArgumentNullException(nameof(context));
 
         public async Task<List<Publication>> GetAllAsync() => await _context.Publications
+            .Include(s => s.Authors)
+            .Include(s => s.CitationIndices)
+            .Include(s => s.Conference)
+            .OrderBy(p => p.Title)
+            .ToListAsync();
+
+        public async Task<List<Publication>?> GetAllAsyncFilterWith(Expression<Func<Publication, bool>> PublicationMatchesFilter) => await _context.Publications
+            .Where(PublicationMatchesFilter)
             .Include(s => s.Authors)
             .Include(s => s.CitationIndices)
             .Include(s => s.Conference)

@@ -1,4 +1,6 @@
-﻿namespace DocumentApp.Domain
+﻿using System.Text.Json.Serialization;
+
+namespace DocumentApp.Domain
 {
     public enum Indexator
     {
@@ -13,5 +15,9 @@
         public Guid Id { get; set; }
         public Indexator Indexator { get; set; }
         public string URL { get; set; } = string.Empty;
+
+        public Guid PublicationId { get; set; }
+
+        [JsonIgnore] public Publication Publication { get; set; } = null!;
     }
 }

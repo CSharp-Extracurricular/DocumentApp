@@ -2,8 +2,6 @@
 using DocumentApp.Infrastructure;
 using DocumentApp.Domain;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace DocumentApp.API.Controllers
 {
     [Route("api/[controller]")]
@@ -12,35 +10,40 @@ namespace DocumentApp.API.Controllers
     {
         private readonly Context _context;
         private readonly PublicationRepository _publicationRepository;
+        
         public PublicationsController(Context context)
         {
             _context = context;
-            _publicationRepository = new PublicationRepository(_context);
+            _publicationRepository = new(_context);
         }
 
         // GET: api/Publication
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Publication>>> GetPublications()
-        {
-            //return await _context.Publications.ToListAsync();
-            return await _publicationRepository.GetAllAsync();
-        }
+        public async Task<ActionResult<IEnumerable<Publication>>> GetPublications() => await _publicationRepository.GetAllAsync();
 
+        // GET: api/Publication/filter/year/5
+        [HttpGet("filter/year/{year}")]
+        public async Task<ActionResult<IEnumerable<Publication>?>> FilterPublicationsByYear(int year) => await _publicationRepository.GetAllAsyncFilterWith(PublicationFilter.HasSame(year));
+
+        // GET: api/Publication/filter/type/5
+        [HttpGet("filter/type/{type}")]
+        public async Task<ActionResult<IEnumerable<Publication>?>> FilterPublicationsByType(PublicationType type) => await _publicationRepository.GetAllAsyncFilterWith(PublicationFilter.HasSame(type));
+        
         // GET: api/Publication/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Publication>> GetPublication(Guid id)
         {
-            //var publication = await _context.Publications.FindAsync(id);
-            var publication = await _publicationRepository.GetByIdAsync(id);
+            Publication? publication = await _publicationRepository.GetByIdAsync(id);
+            
             if (publication == null)
             {
                 return NotFound();
             }
+            
             return publication;
         }
 
         // PUT: api/Publication/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPublication(Guid id, Publication publication)
         {
@@ -48,13 +51,17 @@ namespace DocumentApp.API.Controllers
             {
                 return BadRequest();
             }
-            await _publicationRepository.UpdateAsync(publication);
 
+            if (!PublicationExists(id))
+            {
+                return NotFound();
+            }
+            
+            await _publicationRepository.UpdateAsync(publication);
             return NoContent();
         }
 
         // POST: api/Publication
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Publication>> PostPublications(Publication publication)
         {
@@ -66,22 +73,16 @@ namespace DocumentApp.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePublication(Guid id)
         {
-            var publication = await _publicationRepository.GetByIdAsync(id);
-            if (publication == null)
+            if (!PublicationExists(id))
             {
-                return NotFound();
+                return NotFound(id);
             }
-
-            _context.Publications.Remove(publication);
-            await _context.SaveChangesAsync();
-            //await _publicationRepository.DeleteAsync(id);
+            
+            await _publicationRepository.DeleteByIdAsync(id);
 
             return NoContent();
         }
 
-        private bool PublicationExists(Guid id)
-        {
-            return _context.Publications.Any(e => e.Id == id);
-        }
+        private bool PublicationExists(Guid id) => _publicationRepository.GetByIdAsync(id) != null;
     }
 }
