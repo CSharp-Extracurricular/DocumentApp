@@ -19,23 +19,15 @@ namespace DocumentApp.Infrastructure
             .OrderBy(p => p.Title)
             .ToListAsync();
 
-        //public async Task<List<Publication>?> GetAllAsyncFilterWith(Expression<Func<Publication, bool>> PublicationMatchesFilter) => await _context.Publications
-        //    .Where(PublicationMatchesFilter)
-        //    .Include(s => s.Authors)
-        //    .Include(s => s.CitationIndices)
-        //    .Include(s => s.Conference)
-        //    .OrderBy(p => p.Title)
-        //    .ToListAsync();
-
-        private IEnumerable<Publication> GetAllAsIEnumerable() => _context.Publications
+        private IQueryable<Publication> GetAllAsIQueryable() => _context.Publications
             .Include(s => s.Authors)
             .Include(s => s.CitationIndices)
             .Include(s => s.Conference)
             .OrderBy(p => p.Title);
 
-        public List<Publication> GetAllAsyncFiltered(PublicationQuery query)
+        public async Task<List<Publication>> GetAllAsyncFiltered(PublicationQuery query)
         {
-            var result = GetAllAsIEnumerable();
+            IQueryable<Publication> result = GetAllAsIQueryable();
 
             if (query.StartYear != null)
             {
@@ -52,7 +44,7 @@ namespace DocumentApp.Infrastructure
                 result = result.Where(a => a.PublicationType == query.PublicationType);
             }
 
-            return result.ToList();
+            return await result.ToListAsync();
         }
 
         public async Task<Publication?> GetByIdAsync(Guid id) => await _context.Publications
