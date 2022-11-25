@@ -29,10 +29,6 @@ namespace DocumentApp.API.Controllers
         [HttpGet("filter/type/{type}")]
         public async Task<ActionResult<IEnumerable<Publication>?>> FilterPublicationsByType(PublicationType type) => await _publicationRepository.GetAllAsyncFilterWith(PublicationFilter.HasSame(type));
 
-        // GET: api/Publication/filter/author/
-        [HttpGet("filter/type/{author}")]
-        public async Task<ActionResult<IEnumerable<Publication>?>> FilterPublicationsByType(Author author) => await _publicationRepository.GetAllAsyncFilterWith(PublicationFilter.HasSame(author));
-
         // GET: api/Publication/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Publication>> GetPublication(Guid id)
