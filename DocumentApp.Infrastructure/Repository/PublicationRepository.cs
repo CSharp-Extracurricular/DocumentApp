@@ -12,18 +12,7 @@ namespace DocumentApp.Infrastructure
 
         public PublicationRepository(Context context) => _context = context ?? throw new ArgumentNullException(nameof(context));
 
-        public async Task<List<Publication>> GetAllAsync() => await _context.Publications
-            .Include(s => s.Authors)
-            .Include(s => s.CitationIndices)
-            .Include(s => s.Conference)
-            .OrderBy(p => p.Title)
-            .ToListAsync();
-
-        private IQueryable<Publication> GetAllAsIQueryable() => _context.Publications
-            .Include(s => s.Authors)
-            .Include(s => s.CitationIndices)
-            .Include(s => s.Conference)
-            .OrderBy(p => p.Title);
+        public async Task<List<Publication>> GetAllAsync() => await GetAllAsIQueryable().ToListAsync();
 
         public async Task<List<Publication>> GetAllAsyncFiltered(PublicationQuery query)
         {
@@ -80,6 +69,12 @@ namespace DocumentApp.Infrastructure
 
             return await _context.SaveChangesAsync();
         }
+
+        private IQueryable<Publication> GetAllAsIQueryable() => _context.Publications
+            .Include(s => s.Authors)
+            .Include(s => s.CitationIndices)
+            .Include(s => s.Conference)
+            .OrderBy(p => p.Title);
 
         private async Task EnsureEntryInContext<T>(T entry) where T : class, IIdentifiableT
         {
