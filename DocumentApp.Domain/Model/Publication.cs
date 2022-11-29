@@ -22,6 +22,9 @@
         // Идентификатор для группировки идентичных объектов.
         public Guid AuthorGroupId { get; set; }
 
+        // Идентификатор создателя записи.
+        public Guid UserId { get; set; }
+
         public List<Author> Authors { get; set; } = new List<Author>();
         public List<CitationIndex> CitationIndices { get; set; } = new List<CitationIndex>();
         public Conference? Conference { get; set; }

@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.Text.Json.Serialization;
 
 namespace DocumentApp.Domain
 {
@@ -19,6 +20,6 @@ namespace DocumentApp.Domain
 
         public Guid PublicationId { get; set; }
 
-        [JsonIgnore] public Publication Publication { get; set; } = null!;
+        [ValidateNever] [JsonIgnore] public Publication Publication { get; set; } = null!;
     }
 }
