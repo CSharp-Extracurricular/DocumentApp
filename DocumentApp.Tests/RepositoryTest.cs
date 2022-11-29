@@ -145,8 +145,8 @@ namespace DocumentApp.Tests
             return new CitationIndex()
             {
                 Id = Guid.NewGuid(),
-                Indexator = (Indexator.ELibrary),
-                URL = Guid.NewGuid().ToString()
+                Indexator = (Indexator.ELibrary)
+                //URL = Guid.NewGuid().ToString()
             };
         }
     }
