@@ -14,7 +14,7 @@ namespace DocumentApp.Domain
     {
         public Guid Id { get; set; }
         public Indexator Indexator { get; set; }
-        public string URL { get; set; } = string.Empty;
+        public Uri? URL { get; set; }
 
         public Guid PublicationId { get; set; }
 

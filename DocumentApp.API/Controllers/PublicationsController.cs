@@ -17,28 +17,6 @@ namespace DocumentApp.API.Controllers
             _publicationRepository = new(_context);
         }
 
-        // GET: api/Publication
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Publication>>> GetPublications() => await _publicationRepository.GetAllAsync();
-
-        // GET: api/Publication/filter/
-        [HttpGet("filter/{query}")]
-        public async Task<ActionResult<IEnumerable<Publication>>> PublicationFilter(PublicationQuery query) => await _publicationRepository.GetAllAsyncFiltered(query);
-
-        // GET: api/Publication/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Publication>> GetPublication(Guid id)
-        {
-            Publication? publication = await _publicationRepository.GetByIdAsync(id);
-            
-            if (publication == null)
-            {
-                return NotFound();
-            }
-            
-            return publication;
-        }
-
         // PUT: api/Publication/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPublication(Guid id, Publication publication)
