@@ -8,22 +8,22 @@ namespace DocumentApp.API.Controllers
     [ApiController]
     public class PublicationsController : ControllerBase
     {
-        private readonly Context _context;
         private readonly PublicationRepository _publicationRepository;
         
         public PublicationsController(Context context)
         {
-            _context = context;
-            _publicationRepository = new(_context);
+            _publicationRepository = new(context);
         }
 
         // GET: api/Publication
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Publication>>> GetPublications() => await _publicationRepository.GetAllAsync();
+        public async Task<ActionResult<IEnumerable<Publication>>> GetPublications() => await _publicationRepository
+            .GetAllAsync();
 
         // GET: api/Publication/filter/
         [HttpGet("filter/{query}")]
-        public async Task<ActionResult<IEnumerable<Publication>>> PublicationFilter(PublicationQuery query) => await _publicationRepository.GetAllAsyncFiltered(query);
+        public async Task<ActionResult<IEnumerable<Publication>>> PublicationFilter(PublicationQuery query) => await _publicationRepository
+            .GetAllAsyncFiltered(query);
 
         // GET: api/Publication/5
         [HttpGet("{id}")]
@@ -36,7 +36,7 @@ namespace DocumentApp.API.Controllers
                 return NotFound();
             }
             
-            return publication;
+            return Ok(publication);
         }
 
         // PUT: api/Publication/5

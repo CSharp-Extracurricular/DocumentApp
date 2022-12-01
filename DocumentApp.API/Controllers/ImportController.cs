@@ -11,12 +11,21 @@ namespace DocumentApp.API.Controllers
 
         public ImportController(Context context) => _context = context;
 
-        // GET api/Import/5
+        // GET api/ImportAsync/5
         [HttpGet("{id}")]
-        public async Task GetPublication(Uri uri)
+        public async Task<IActionResult> GetPublication(Uri uri)
         {
             Importer importer = new(uri, _context);
-            await importer.Import();
+
+            try
+            {
+                await importer.ImportAsync();
+                return Ok();
+            }
+            catch (ArgumentNullException exception) 
+            {
+                return NotFound(exception.ParamName);
+            }
         }
     }
 }
