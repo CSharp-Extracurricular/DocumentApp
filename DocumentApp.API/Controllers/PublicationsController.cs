@@ -9,11 +9,8 @@ namespace DocumentApp.API.Controllers
     public class PublicationsController : ControllerBase
     {
         private readonly PublicationRepository _publicationRepository;
-        
-        public PublicationsController(Context context)
-        {
-            _publicationRepository = new(context);
-        }
+
+        public PublicationsController(Context context) => _publicationRepository = new(context);
 
         // GET: api/Publication
         [HttpGet]
@@ -50,10 +47,11 @@ namespace DocumentApp.API.Controllers
 
             if (!PublicationExists(id))
             {
-                return NotFound();
+                return NotFound(id);
             }
             
             await _publicationRepository.UpdateAsync(publication);
+
             return NoContent();
         }
 
