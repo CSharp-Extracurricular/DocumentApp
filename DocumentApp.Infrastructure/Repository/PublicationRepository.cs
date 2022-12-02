@@ -1,7 +1,5 @@
 ﻿using DocumentApp.Domain;
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
-using System.Linq.Expressions;
 
 namespace DocumentApp.Infrastructure
 {

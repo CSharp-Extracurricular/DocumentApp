@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc; //ввод, изменение и удаление. 
+﻿using Microsoft.AspNetCore.Mvc;
 using DocumentApp.Infrastructure;
 using DocumentApp.Domain;
+using DocumentApp.DTO; // Не удалять using.
 
 namespace DocumentApp.API.Controllers
 {
+    /// <summary>
+    /// Класс контроллера, содержащий методы API для ввода, изменения и удаления информации.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class EditController : ControllerBase
@@ -12,7 +16,7 @@ namespace DocumentApp.API.Controllers
 
         public EditController(Context context) => _publicationRepository = new PublicationRepository(context);
 
-        // PUT: api/Publication/5
+        // PUT: api/Edit/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPublication(Guid id, Publication publication)
         {
@@ -31,7 +35,7 @@ namespace DocumentApp.API.Controllers
             return NoContent();
         }
 
-        // POST: api/Publication
+        // POST: api/Edit
         [HttpPost]
         public async Task<ActionResult<Publication>> PostPublications(Publication publication)
         {
@@ -39,7 +43,7 @@ namespace DocumentApp.API.Controllers
             return CreatedAtAction("GetPublications", new { id = publication.Id }, publication);
         }
 
-        // DELETE: api/Publication/5
+        // DELETE: api/Edit/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePublication(Guid id)
         {
