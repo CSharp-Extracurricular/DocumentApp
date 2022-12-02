@@ -11,34 +11,32 @@ namespace DocumentApp.API.Controllers
     [ApiController]
     public class ViewController : ControllerBase
     {
-        private readonly Context _context;
         private readonly PublicationRepository _publicationRepository;
 
-        public ViewController(Context context)
-        {
-            _context = context;
-            _publicationRepository = new PublicationRepository(_context);
-        }
+        public ViewController(Context context) => _publicationRepository = new PublicationRepository(context);
 
-        // GET: api/<ViewController>
+        // GET: api/View
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Publication>?>> GetPublications()
-        {
-            //return await _context.Publications.ToListAsync();
-            return await _publicationRepository.GetAllAsync();
-        }
+        public async Task<ActionResult<IEnumerable<Publication>>> GetPublications() => await _publicationRepository
+            .GetAllAsync();
 
-        // GET api/<ViewController>/5
+        // GET: api/Publication/filter/
+        [HttpGet("filter/{query}")]
+        public async Task<ActionResult<IEnumerable<Publication>>> PublicationFilter(PublicationQuery query) => await _publicationRepository
+            .GetAllAsyncFiltered(query);
+
+        // GET: api/Publication/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Publication>> GetPublication(Guid id)
         {
-            //var publication = await _context.Publications.FindAsync(id);
-            var publication = await _publicationRepository.GetByIdAsync(id);
+            Publication? publication = await _publicationRepository.GetByIdAsync(id);
+
             if (publication == null)
             {
                 return NotFound();
             }
-            return publication;
+
+            return Ok(publication);
         }
     }
 }
