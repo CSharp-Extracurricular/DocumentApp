@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc; //на вывод.
 using DocumentApp.Infrastructure;
 using DocumentApp.Domain;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -10,9 +11,14 @@ namespace DocumentApp.API.Controllers
     [ApiController]
     public class ViewController : ControllerBase
     {
-        //private readonly Context _context;
+        private readonly Context _context;
         private readonly PublicationRepository _publicationRepository;
 
+        public ViewController(Context context)
+        {
+            _context = context;
+            _publicationRepository = new PublicationRepository(_context);
+        }
 
         // GET: api/<ViewController>
         [HttpGet]

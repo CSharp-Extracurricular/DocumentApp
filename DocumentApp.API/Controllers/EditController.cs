@@ -13,6 +13,12 @@ namespace DocumentApp.API.Controllers
         private readonly Context _context;
         private readonly PublicationRepository _publicationRepository;
 
+        public EditController(Context context)
+        {
+            _context = context;
+            _publicationRepository = new PublicationRepository(_context);
+        }
+
         // POST api/<EditController>
         [HttpPost]
         public async Task<ActionResult<Publication>> PostPublications(Publication publication)
