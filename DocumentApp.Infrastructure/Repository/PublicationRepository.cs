@@ -1,5 +1,6 @@
 ﻿using DocumentApp.Domain;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
 using System.Linq.Expressions;
 
 namespace DocumentApp.Infrastructure
@@ -11,20 +12,29 @@ namespace DocumentApp.Infrastructure
 
         public PublicationRepository(Context context) => _context = context ?? throw new ArgumentNullException(nameof(context));
 
-        public async Task<List<Publication>> GetAllAsync() => await _context.Publications
-            .Include(s => s.Authors)
-            .Include(s => s.CitationIndices)
-            .Include(s => s.Conference)
-            .OrderBy(p => p.Title)
-            .ToListAsync();
+        public async Task<List<Publication>> GetAllAsync() => await GetAllAsIQueryable().ToListAsync();
 
-        public async Task<List<Publication>?> GetAllAsyncFilterWith(Expression<Func<Publication, bool>> PublicationMatchesFilter) => await _context.Publications
-            .Where(PublicationMatchesFilter)
-            .Include(s => s.Authors)
-            .Include(s => s.CitationIndices)
-            .Include(s => s.Conference)
-            .OrderBy(p => p.Title)
-            .ToListAsync();
+        public async Task<List<Publication>> GetAllAsyncFiltered(PublicationQuery query)
+        {
+            IQueryable<Publication> result = GetAllAsIQueryable();
+
+            if (query.StartYear != null)
+            {
+                result = result.Where(a => a.PublishingYear >= query.StartYear);
+            }
+
+            if (query.EndYear != null)
+            {
+                result = result.Where(a => a.PublishingYear <= query.EndYear);
+            }
+
+            if (query.PublicationType != null)
+            {
+                result = result.Where(a => a.PublicationType == query.PublicationType);
+            }
+
+            return await result.ToListAsync();
+        }
 
         public async Task<Publication?> GetByIdAsync(Guid id) => await _context.Publications
             .Where(a => a.Id == id)
@@ -59,6 +69,12 @@ namespace DocumentApp.Infrastructure
 
             return await _context.SaveChangesAsync();
         }
+
+        private IQueryable<Publication> GetAllAsIQueryable() => _context.Publications
+            .Include(s => s.Authors)
+            .Include(s => s.CitationIndices)
+            .Include(s => s.Conference)
+            .OrderBy(p => p.Title);
 
         private async Task EnsureEntryInContext<T>(T entry) where T : class, IIdentifiableT
         {

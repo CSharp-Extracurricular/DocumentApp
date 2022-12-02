@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using System.Text.Json.Serialization;
-
-namespace DocumentApp.Domain
+﻿namespace DocumentApp.DTO
 {
-    public class Author : IIdentifiableT
+    public class AuthorDto
     {
         public Guid Id { get; set; }
 
@@ -14,12 +11,10 @@ namespace DocumentApp.Domain
         public string LastName { get; set; } = string.Empty;
         public string? PatronimicName { get; set; }
         public string Email { get; set; } = string.Empty;
-        
+
         // Номер автора в списке авторов публикации. 
         public int Number { get; set; }
 
         public Guid PublicationId { get; set; }
-
-        [ValidateNever] [JsonIgnore] public Publication Publication { get; set; } = null!;
     }
 }

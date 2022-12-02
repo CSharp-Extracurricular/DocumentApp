@@ -11,6 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentApp.Infrastructure"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentApp.Tests", "DocumentApp.Tests\DocumentApp.Tests.csproj", "{5A538BDE-E9BD-43B9-B777-6AAA20B418BC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentApp.DTO", "DocumentApp.DTO\DocumentApp.DTO.csproj", "{12075D0B-1A76-4177-9326-4C8E5ECCBCCD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8DC09FF6-1A7E-4E32-84B1-8D6F7E3A230A} = {8DC09FF6-1A7E-4E32-84B1-8D6F7E3A230A}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +38,10 @@ Global
 		{5A538BDE-E9BD-43B9-B777-6AAA20B418BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A538BDE-E9BD-43B9-B777-6AAA20B418BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A538BDE-E9BD-43B9-B777-6AAA20B418BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12075D0B-1A76-4177-9326-4C8E5ECCBCCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12075D0B-1A76-4177-9326-4C8E5ECCBCCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12075D0B-1A76-4177-9326-4C8E5ECCBCCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12075D0B-1A76-4177-9326-4C8E5ECCBCCD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

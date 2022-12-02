@@ -97,10 +97,9 @@ namespace DocumentApp.Tests
         {
             Publication publication = new()
             {
-                Id = Guid.NewGuid(),
-                Title = Guid.NewGuid().ToString(),
-                PublicationType = (PublicationType)random.Next(0, 4),
-                PublishingYear = random.Next(1990, 2022)
+                Title = "Test case",
+                PublicationType = 0,
+                PublishingYear = 1994
             };
 
             for (int i = 0, j = random.Next(1, 3); i < j; i++)
@@ -118,10 +117,9 @@ namespace DocumentApp.Tests
         {
             return new Author()
             {
-                Id = Guid.NewGuid(),
-                FirstName = Guid.NewGuid().ToString(),
-                LastName = Guid.NewGuid().ToString(),
-                PatronimicName = Guid.NewGuid().ToString(),
+                FirstName = "Test case",
+                LastName = "Test case",
+                PatronimicName = "Test case",
                 Number = 1
             };
         }
@@ -130,13 +128,12 @@ namespace DocumentApp.Tests
         {
             return new Conference()
             {
-                Id = Guid.NewGuid(),
-                ShortName = Guid.NewGuid().ToString(),
-                FullName = Guid.NewGuid().ToString(),
+                ShortName = "Test case",
+                FullName = "Test case",
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now,
-                Type = (ConferenceType.International),
-                Location = Guid.NewGuid().ToString()
+                Type = ConferenceType.International,
+                Location = "Test case"
             };
         }
 
@@ -144,9 +141,8 @@ namespace DocumentApp.Tests
         {
             return new CitationIndex()
             {
-                Id = Guid.NewGuid(),
-                Indexator = (Indexator.ELibrary),
-                URL = Guid.NewGuid().ToString()
+                Indexator = Indexator.ELibrary,
+                URL = new Uri("https://learn.microsoft.com/ru-ru/dotnet/api/system.uri?view=net-7.0")
             };
         }
     }

@@ -1,15 +1,8 @@
-﻿namespace DocumentApp.Domain
-{
-    public enum PublicationType
-    {
-        Monography,
-        Textbook,
-        Article,
-        Report,
-        Thesis
-    }
+﻿using DocumentApp.Domain;
 
-    public class Publication : IIdentifiableT
+namespace DocumentApp.DTO
+{
+    public class PublicationDto
     {
         public Guid Id { get; set; }
         public string Title { get; set; } = string.Empty;
@@ -25,8 +18,8 @@
         // Идентификатор создателя записи.
         public Guid UserId { get; set; }
 
-        public List<Author> Authors { get; set; } = new List<Author>();
-        public List<CitationIndex> CitationIndices { get; set; } = new List<CitationIndex>();
-        public Conference? Conference { get; set; }
+        public List<AuthorDto> Authors { get; set; } = new List<AuthorDto>();
+        public List<CitationIndexDto> CitationIndices { get; set; } = new List<CitationIndexDto>();
+        public ConferenceDto? Conference { get; set; }
     }
 }

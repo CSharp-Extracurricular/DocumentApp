@@ -1,17 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using System.Text.Json.Serialization;
+﻿using DocumentApp.Domain;
 
-namespace DocumentApp.Domain
+namespace DocumentApp.DTO
 {
-    public enum ConferenceType
-    {
-        Local,
-        Regional,
-        National,
-        International
-    }
-
-    public class Conference : IIdentifiableT
+    public class ConferenceDto
     {
         public Guid Id { get; set; }
         public string ShortName { get; set; } = string.Empty;
@@ -22,7 +13,5 @@ namespace DocumentApp.Domain
         public string Location { get; set; } = string.Empty;
 
         public Guid PublicationId { get; set; }
-
-        [ValidateNever] [JsonIgnore] public Publication Publication { get; set; } = null!;
     }
 }
