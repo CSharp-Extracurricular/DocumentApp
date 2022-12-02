@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc; //на вывод.
 using DocumentApp.Infrastructure;
 using DocumentApp.Domain;
-using Microsoft.EntityFrameworkCore;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace DocumentApp.API.Controllers
 {
