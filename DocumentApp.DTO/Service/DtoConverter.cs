@@ -2,7 +2,7 @@
 
 namespace DocumentApp.DTO
 {
-    public static class DtoHandler
+    public static class DtoConverter
     {
         public static PublicationDto Translate(Publication publication)
         {

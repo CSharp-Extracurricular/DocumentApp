@@ -7,16 +7,16 @@ namespace DocumentApp.API
     {
         private readonly HttpClient _httpClient;
         private readonly Uri _exporterUri;
-        private readonly ISecurity _security;
         private readonly PublicationRepository _publicationRepository;
+        private readonly Guid _personId;
 
-        public Importer(Uri uri, Context context)
+        public Importer(Uri uri, Context context, Guid personId)
         {
             _httpClient = new HttpClient();
             _exporterUri = uri;
             _httpClient.BaseAddress = _exporterUri;
             _publicationRepository = new PublicationRepository(context);
-            _security = new MockSecurityProvider();
+            _personId = personId;
         }
 
         public async Task ImportAsync()
@@ -29,7 +29,7 @@ namespace DocumentApp.API
             }
             else
             {
-                publication.UserId = _security.GetUserId();
+                publication.UserId = _personId;
                 await _publicationRepository.UpdateAsync(publication);
             }
         }
