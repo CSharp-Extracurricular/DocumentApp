@@ -16,7 +16,7 @@ namespace DocumentApp.API.Controllers
             _security = new MockSecurityProvider();
         }
 
-        // GET api/ImportAsync/5
+        // GET api/Import/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPublication(Uri uri)
         {
@@ -25,7 +25,7 @@ namespace DocumentApp.API.Controllers
             try
             {
                 await importer.ImportAsync();
-                return Ok();
+                return NoContent();
             }
             catch (ArgumentNullException exception) 
             {
