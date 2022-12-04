@@ -17,14 +17,14 @@ namespace DocumentApp.API.Controllers
         }
 
         // GET api/Import/5
-        [HttpGet("{id}")]
+        [HttpGet("{uri}")]
         public async Task<IActionResult> GetPublication(Uri uri)
         {
-            Importer importer = new(uri, _context, _security.GetUserId());
-
             try
             {
+                Importer importer = new(uri, _context, _security.GetUserId());
                 await importer.ImportAsync();
+
                 return NoContent();
             }
             catch (ArgumentNullException exception) 
