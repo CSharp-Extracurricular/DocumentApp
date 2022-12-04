@@ -18,49 +18,17 @@ namespace DocumentApp.API.Controllers
 
         // GET: api/View
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PublicationDto>>> GetPublications()
-        {
-            List<Publication> result = await _publicationRepository.GetAllAsync();
-
-            if (result.Count == 0)
-            {
-                return NoContent();
-            }
-            else
-            {
-                List<PublicationDto> translatedResult = new();
-
-                foreach (Publication publication in result)
-                {
-                    translatedResult.Add(DtoConverter.Translate(publication));
-                }
-
-                return Ok(translatedResult);
-            }
-        }
+        public async Task<ActionResult<IEnumerable<PublicationDto>>> GetPublications() => await ProceedViewRequest();
 
         // GET: api/View/filter/
-        [HttpGet("filter/{query}")]
-        public async Task<ActionResult<IEnumerable<PublicationDto>>> PublicationFilter(PublicationQuery query)
-        {
-            List<Publication> result = await _publicationRepository.GetAllAsyncFiltered(query);
-
-            if (result.Count == 0)
-            {
-                return NoContent();
-            }
-            else
-            {
-                List<PublicationDto> translatedResult = new();
-
-                foreach (Publication publication in result)
-                {
-                    translatedResult.Add(DtoConverter.Translate(publication));
-                }
-
-                return Ok(translatedResult);
-            }
-        }
+        [HttpGet("filter/")]
+        public async Task<ActionResult<IEnumerable<PublicationDto>>> GetPulicationsWithFilter(int? startYear, int? endYear, PublicationType? type)
+            => await ProceedViewRequest(new PublicationQuery 
+                { 
+                    StartYear = startYear, 
+                    EndYear = endYear, 
+                    PublicationType = type 
+                });
 
         // GET: api/View/5
         [HttpGet("{id}")]
@@ -68,12 +36,50 @@ namespace DocumentApp.API.Controllers
         {
             Publication? publication = await _publicationRepository.GetByIdAsync(id);
 
+            return GetViewRequestResultFor(publication);
+        }
+
+        private async Task<ActionResult<IEnumerable<PublicationDto>>> ProceedViewRequest(PublicationQuery? query = null)
+        {
+            IEnumerable<Publication> result = query.HasValue 
+                ? await _publicationRepository.GetAllAsync(query.Value) 
+                : await _publicationRepository.GetAllAsync();
+
+            return GetViewRequestResultFor(result);
+        }
+
+        private ActionResult<IEnumerable<PublicationDto>> GetViewRequestResultFor(IEnumerable<Publication> collection)
+        {
+            if (!collection.Any())
+            {
+                return NoContent();
+            }
+            else
+            {
+                return Ok(GetTranslatedResults(collection));
+            }
+        }
+
+        private ActionResult<PublicationDto> GetViewRequestResultFor(Publication? publication)
+        {
             if (publication == null)
             {
                 return NotFound();
             }
 
             return Ok(DtoConverter.Translate(publication));
+        }
+
+        private static IEnumerable<PublicationDto> GetTranslatedResults(IEnumerable<Publication> collection)
+        {
+            List<PublicationDto> translatedResult = new();
+
+            foreach (Publication publication in collection)
+            {
+                translatedResult.Add(DtoConverter.Translate(publication));
+            }
+
+            return translatedResult;
         }
     }
 }
