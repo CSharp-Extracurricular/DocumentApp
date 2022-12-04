@@ -34,6 +34,7 @@ namespace DocumentApp.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<PublicationDto>> GetPublication(Guid id) => await ProceedViewRequest(id);
 
+        [NonAction]
         private async Task<ActionResult<IEnumerable<PublicationDto>>> ProceedViewRequest(PublicationQuery? query = null)
         {
             IEnumerable<Publication> result = query.HasValue 
@@ -43,6 +44,7 @@ namespace DocumentApp.API.Controllers
             return GetViewRequestResultFor(result);
         }
 
+        [NonAction]
         private async Task<ActionResult<PublicationDto>> ProceedViewRequest(Guid id)
         {
             Publication? publication = await _publicationRepository.GetByIdAsync(id);
@@ -50,6 +52,7 @@ namespace DocumentApp.API.Controllers
             return GetViewRequestResultFor(publication);
         }
 
+        [NonAction]
         private ActionResult<IEnumerable<PublicationDto>> GetViewRequestResultFor(IEnumerable<Publication> collection)
         {
             if (!collection.Any())
@@ -62,6 +65,7 @@ namespace DocumentApp.API.Controllers
             }
         }
 
+        [NonAction]
         private ActionResult<PublicationDto> GetViewRequestResultFor(Publication? publication)
         {
             if (publication == null)
@@ -72,6 +76,7 @@ namespace DocumentApp.API.Controllers
             return Ok(DtoConverter.Translate(publication));
         }
 
+        [NonAction]
         private static IEnumerable<PublicationDto> GetTranslatedResults(IEnumerable<Publication> collection)
         {
             List<PublicationDto> translatedResult = new();
