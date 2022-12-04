@@ -32,12 +32,7 @@ namespace DocumentApp.API.Controllers
 
         // GET: api/View/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<PublicationDto>> GetPublication(Guid id)
-        {
-            Publication? publication = await _publicationRepository.GetByIdAsync(id);
-
-            return GetViewRequestResultFor(publication);
-        }
+        public async Task<ActionResult<PublicationDto>> GetPublication(Guid id) => await ProceedViewRequest(id);
 
         private async Task<ActionResult<IEnumerable<PublicationDto>>> ProceedViewRequest(PublicationQuery? query = null)
         {
@@ -46,6 +41,13 @@ namespace DocumentApp.API.Controllers
                 : await _publicationRepository.GetAllAsync();
 
             return GetViewRequestResultFor(result);
+        }
+
+        private async Task<ActionResult<PublicationDto>> ProceedViewRequest(Guid id)
+        {
+            Publication? publication = await _publicationRepository.GetByIdAsync(id);
+
+            return GetViewRequestResultFor(publication);
         }
 
         private ActionResult<IEnumerable<PublicationDto>> GetViewRequestResultFor(IEnumerable<Publication> collection)
