@@ -10,6 +10,7 @@ namespace DocumentApp.API.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
+    // TODO: найти способ попарно объединить перегруженные методы.
     public class ViewController : ControllerBase
     {
         private readonly PublicationRepository _publicationRepository;
@@ -55,38 +56,33 @@ namespace DocumentApp.API.Controllers
         [NonAction]
         private ActionResult<IEnumerable<PublicationDto>> GetViewRequestResultFor(IEnumerable<Publication> collection)
         {
-            if (!collection.Any())
-            {
-                return NoContent();
-            }
-            else
-            {
-                return Ok(GetTranslatedResults(collection));
-            }
+            return collection.Any()
+                ? Ok(GetTranslatedResult(collection))
+                : NotFound();
         }
 
         [NonAction]
         private ActionResult<PublicationDto> GetViewRequestResultFor(Publication? publication)
         {
-            if (publication == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(DtoConverter.Translate(publication));
+            return (publication != null)
+                ? Ok(GetTranslatedResult(publication))
+                : NotFound();
         }
 
         [NonAction]
-        private static IEnumerable<PublicationDto> GetTranslatedResults(IEnumerable<Publication> collection)
+        private static IEnumerable<PublicationDto> GetTranslatedResult(IEnumerable<Publication> collection)
         {
             List<PublicationDto> translatedResult = new();
 
             foreach (Publication publication in collection)
             {
-                translatedResult.Add(DtoConverter.Translate(publication));
+                translatedResult.Add(GetTranslatedResult(publication));
             }
 
             return translatedResult;
         }
+
+        [NonAction]
+        private static PublicationDto GetTranslatedResult(Publication publication) => DtoConverter.Translate(publication);
     }
 }
