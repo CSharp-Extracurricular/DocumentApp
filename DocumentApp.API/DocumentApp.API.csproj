@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DocumentApp.Domain\DocumentApp.Domain.csproj" />
+    <ProjectReference Include="..\DocumentApp.DTO\DocumentApp.DTO.csproj" />
     <ProjectReference Include="..\DocumentApp.Infrastructure\DocumentApp.Infrastructure.csproj" />
   </ItemGroup>
 

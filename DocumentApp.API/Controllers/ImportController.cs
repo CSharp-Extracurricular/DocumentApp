@@ -8,19 +8,24 @@ namespace DocumentApp.API.Controllers
     public class ImportController : ControllerBase
     {
         private readonly Context _context;
+        private readonly ISecurity _security;
 
-        public ImportController(Context context) => _context = context;
+        public ImportController(Context context)
+        {
+            _context = context;
+            _security = new MockSecurityProvider();
+        }
 
-        // GET api/ImportAsync/5
+        // GET api/Import/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPublication(Uri uri)
         {
-            Importer importer = new(uri, _context);
+            Importer importer = new(uri, _context, _security.GetUserId());
 
             try
             {
                 await importer.ImportAsync();
-                return Ok();
+                return NoContent();
             }
             catch (ArgumentNullException exception) 
             {

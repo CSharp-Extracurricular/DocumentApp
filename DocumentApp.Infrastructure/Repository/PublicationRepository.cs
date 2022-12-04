@@ -1,7 +1,5 @@
 ﻿using DocumentApp.Domain;
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
-using System.Linq.Expressions;
 
 namespace DocumentApp.Infrastructure
 {
@@ -14,23 +12,23 @@ namespace DocumentApp.Infrastructure
 
         public async Task<List<Publication>> GetAllAsync() => await GetAllAsIQueryable().ToListAsync();
 
-        public async Task<List<Publication>> GetAllAsyncFiltered(PublicationQuery query)
+        public async Task<List<Publication>> GetAllAsync(PublicationQuery filtrationQuery)
         {
             IQueryable<Publication> result = GetAllAsIQueryable();
 
-            if (query.StartYear != null)
+            if (filtrationQuery.StartYear != null)
             {
-                result = result.Where(a => a.PublishingYear >= query.StartYear);
+                result = result.Where(a => a.PublishingYear >= filtrationQuery.StartYear);
             }
 
-            if (query.EndYear != null)
+            if (filtrationQuery.EndYear != null)
             {
-                result = result.Where(a => a.PublishingYear <= query.EndYear);
+                result = result.Where(a => a.PublishingYear <= filtrationQuery.EndYear);
             }
 
-            if (query.PublicationType != null)
+            if (filtrationQuery.PublicationType != null)
             {
-                result = result.Where(a => a.PublicationType == query.PublicationType);
+                result = result.Where(a => a.PublicationType == filtrationQuery.PublicationType);
             }
 
             return await result.ToListAsync();
