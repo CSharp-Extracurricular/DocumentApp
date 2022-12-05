@@ -40,7 +40,7 @@ namespace DocumentApp.API.Controllers
         public async Task<ActionResult<Publication>> PostPublications(Publication publication)
         {
             await _publicationRepository.AddAsync(publication);
-            return CreatedAtAction("GetPublications", new { id = publication.Id }, publication);
+            return CreatedAtAction("GetAllPublicationsAsync", new { id = publication.Id }, publication);
         }
 
         // DELETE: api/Edit/5
