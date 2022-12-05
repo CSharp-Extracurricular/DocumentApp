@@ -78,6 +78,6 @@ namespace DocumentApp.API.Controllers
         }
 
         [NonAction]
-        private static PublicationDto GetTranslatedResult(Publication publication) => DtoConverter.Translate(publication);
+        private static PublicationDto GetTranslatedResult(Publication publication) => DtoConverter.Convert(publication);
     }
 }
