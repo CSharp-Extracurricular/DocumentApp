@@ -8,18 +8,6 @@ namespace DocumentApp.Infrastructure
         public int? EndYear { get; set; } = null;
         public PublicationType? PublicationType { get; set; } = null;
 
-        public PublicationQuery()
-        {
-            StartYear = null;
-            EndYear = null;
-            PublicationType = null;
-        }
-
-        public PublicationQuery(int? startYear, int? endYear, PublicationType? type)
-        {
-            StartYear = startYear;
-            EndYear = endYear;
-            PublicationType = type;
-        }
+        public PublicationQuery() { }
     }
 }
