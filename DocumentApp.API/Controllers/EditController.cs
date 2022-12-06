@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using DocumentApp.Infrastructure;
-using DocumentApp.Domain;
-using DocumentApp.DTO; // Не удалять using.
+using DocumentApp.DTO;
 
 namespace DocumentApp.API.Controllers
 {
