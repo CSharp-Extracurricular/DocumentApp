@@ -1,7 +1,4 @@
 ﻿using DocumentApp.Domain;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 
 namespace DocumentApp.DTO
 {
@@ -110,13 +107,23 @@ namespace DocumentApp.DTO
                 CitationIndices = ConvertListToNative(publicationdto.CitationIndices)
             };
 
+            foreach (Author author in result.Authors)
+            {
+                author.Publication = result;
+            }
+
+            foreach (CitationIndex index in result.CitationIndices)
+            {
+                index.Publication = result;
+            }
+
             if (publicationdto.Conference != null)
             {
                 result.Conference = ConvertToNative(publicationdto.Conference);
+                result.Conference.Publication = result;
             }
 
             return result;
-
         }
 
         public static List<Author> ConvertListToNative(List<AuthorDto> list)
