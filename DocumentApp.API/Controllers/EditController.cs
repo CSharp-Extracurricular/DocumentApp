@@ -18,9 +18,9 @@ namespace DocumentApp.API.Controllers
 
         // PUT: api/Edit/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPublication(Guid id, Publication publication)
+        public async Task<IActionResult> PutPublication(Guid id, PublicationDto publicationDto)
         {
-            if (id != publication.Id)
+            if (id != publicationDto.Id)
             {
                 return BadRequest();
             }
@@ -30,17 +30,17 @@ namespace DocumentApp.API.Controllers
                 return NotFound(id);
             }
 
-            await _publicationRepository.UpdateAsync(publication);
+            await _publicationRepository.UpdateAsync(DtoConverter.ConvertToNative(publicationDto));
 
             return NoContent();
         }
 
         // POST: api/Edit
         [HttpPost]
-        public async Task<ActionResult<Publication>> PostPublications(Publication publication)
+        public async Task<ActionResult<PublicationDto>> PostPublications(PublicationDto publicationDto)
         {
-            await _publicationRepository.AddAsync(publication);
-            return CreatedAtAction("GetAllPublicationsAsync", new { id = publication.Id }, publication);
+            await _publicationRepository.AddAsync(DtoConverter.ConvertToNative(publicationDto));
+            return CreatedAtAction("GetAllPublicationsAsync", new { id = publicationDto.Id }, publicationDto);
         }
 
         // DELETE: api/Edit/5
