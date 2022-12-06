@@ -21,12 +21,12 @@ namespace DocumentApp.API
 
         public async Task ImportAsync()
         {
-            Publication publication = await ProceedGetRequestAsync();
+            Publication? publication = await ProceedGetRequestAsync();
 
             await ImportPublicationIfNotNullAsync(publication);
         }
 
-        private async Task ImportPublicationIfNotNullAsync(Publication publication)
+        private async Task ImportPublicationIfNotNullAsync(Publication? publication)
         {
             if (publication == null)
             {
@@ -44,6 +44,7 @@ namespace DocumentApp.API
             await _publicationRepository.UpdateAsync(publication);
         }
 
-        private async Task<Publication> ProceedGetRequestAsync() => await _httpClient.GetFromJsonAsync<Publication>(_exporterUri) ?? null!;
+        private async Task<Publication?> ProceedGetRequestAsync() 
+            => await _httpClient.GetFromJsonAsync<Publication?>(_exporterUri) ?? null!;
     }
 }

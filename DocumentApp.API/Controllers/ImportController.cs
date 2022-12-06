@@ -3,6 +3,9 @@ using DocumentApp.Infrastructure;
 
 namespace DocumentApp.API.Controllers
 {
+    /// <summary>
+    /// Класс контроллера, содержащий методы для импорта публикаций из другой системы.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class ImportController : ControllerBase
