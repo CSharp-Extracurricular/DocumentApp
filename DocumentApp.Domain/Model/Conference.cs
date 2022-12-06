@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using System.Text.Json.Serialization;
-
-namespace DocumentApp.Domain
+﻿namespace DocumentApp.Domain
 {
     public enum ConferenceType
     {
@@ -23,6 +20,6 @@ namespace DocumentApp.Domain
 
         public Guid PublicationId { get; set; }
 
-        [ValidateNever] [JsonIgnore] public Publication Publication { get; set; } = null!;
+        public Publication Publication { get; set; } = null!;
     }
 }
