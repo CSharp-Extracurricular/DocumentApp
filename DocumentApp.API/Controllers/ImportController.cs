@@ -27,9 +27,9 @@ namespace DocumentApp.API.Controllers
 
                 return NoContent();
             }
-            catch (ArgumentNullException exception) 
+            catch (Exception exception) 
             {
-                return NotFound(exception.ParamName);
+                return NotFound(exception.Message);
             }
         }
     }

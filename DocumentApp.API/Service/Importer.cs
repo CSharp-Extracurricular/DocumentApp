@@ -21,17 +21,29 @@ namespace DocumentApp.API
 
         public async Task ImportAsync()
         {
-            Publication publication = await _httpClient.GetFromJsonAsync<Publication>(_exporterUri) ?? null!;
-            
+            Publication publication = await ProceedGetRequestAsync();
+
+            await ImportPublicationIfNotNullAsync(publication);
+        }
+
+        private async Task ImportPublicationIfNotNullAsync(Publication publication)
+        {
             if (publication == null)
             {
-                throw new ArgumentNullException(nameof(publication));
+                throw new Exception($"Error: Publication not found on request URI: {_exporterUri}");
             }
             else
             {
-                publication.UserId = _personId;
-                await _publicationRepository.UpdateAsync(publication);
+                await EnsurePublicationInContextAsync(publication);
             }
         }
+
+        private async Task EnsurePublicationInContextAsync(Publication publication)
+        {
+            publication.UserId = _personId;
+            await _publicationRepository.UpdateAsync(publication);
+        }
+
+        private async Task<Publication> ProceedGetRequestAsync() => await _httpClient.GetFromJsonAsync<Publication>(_exporterUri) ?? null!;
     }
 }
