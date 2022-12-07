@@ -24,7 +24,7 @@ namespace DocumentApp.API.Controllers
                 return BadRequest();
             }
 
-            if (!PublicationExists(id))
+            if (!await IsPublicationExist(id))
             {
                 return NotFound(id);
             }
@@ -46,7 +46,7 @@ namespace DocumentApp.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePublication(Guid id)
         {
-            if (!PublicationExists(id))
+            if (!await IsPublicationExist(id))
             {
                 return NotFound(id);
             }
@@ -56,6 +56,6 @@ namespace DocumentApp.API.Controllers
             return NoContent();
         }
 
-        private bool PublicationExists(Guid id) => _publicationRepository.GetByIdAsync(id) != null;
+        private async Task<bool> IsPublicationExist(Guid id) => await _publicationRepository.GetByIdAsync(id) != null;
     }
 }
