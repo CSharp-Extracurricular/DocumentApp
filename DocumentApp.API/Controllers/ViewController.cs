@@ -53,7 +53,7 @@ namespace DocumentApp.API.Controllers
         {
             return collection.Any()
                 ? Ok(GetTranslatedResult(collection))
-                : NotFound();
+                : NoContent();
         }
 
         [NonAction]
@@ -61,7 +61,7 @@ namespace DocumentApp.API.Controllers
         {
             return (publication != null)
                 ? Ok(GetTranslatedResult(publication))
-                : NotFound();
+                : NoContent();
         }
 
         [NonAction]
