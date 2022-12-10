@@ -1,5 +1,6 @@
 ﻿using DocumentApp.Domain;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace DocumentApp.Infrastructure
 {
@@ -55,16 +56,78 @@ namespace DocumentApp.Infrastructure
 
         public async Task<int> UpdateAsync(Publication publication)
         {
-            await EnsureEntryInContext(publication.Authors);
-            await EnsureEntryInContext(publication.CitationIndices);
+            Publication? existingEntry = await _context.FindAsync<Publication>(publication.Id);
 
-            if (publication.Conference != null)
+            if (existingEntry != null)
             {
-                await EnsureEntryInContext(publication.Conference);
+                _context.Entry(existingEntry).CurrentValues.SetValues(publication);
+
+                foreach (var author in publication.Authors)
+                {
+                    var existingAuthor = existingEntry.Authors.FirstOrDefault(p => p.Id == author.Id);
+                    
+                    if (existingAuthor == null)
+                    {
+                        _context.Add(author);
+                    }
+                    else
+                    {
+                        _context.Entry(existingAuthor).CurrentValues.SetValues(author);
+                    }
+                }
+                foreach (var existingAuthor in existingEntry.Authors)
+                {
+                    if (!publication.Authors.Any(a => a.Id == existingAuthor.Id))
+                    {
+                        _context.Remove(existingAuthor);
+                    }
+                }
+
+                foreach (var index in publication.CitationIndices)
+                {
+                    var existingIndex = existingEntry.CitationIndices.FirstOrDefault(p => p.Id == index.Id);
+                    
+                    if (existingIndex == null)
+                    {
+                        _context.Add(index);
+                    }
+                    else
+                    {
+                        _context.Entry(existingIndex).CurrentValues.SetValues(index);
+                    }
+                }
+                foreach (var existingIndex in existingEntry.CitationIndices)
+                {
+                    if (!publication.CitationIndices.Any(a => a.Id == existingIndex.Id))
+                    {
+                        _context.Remove(existingIndex);
+                    }
+                }
+
+                if (publication.Conference != null)
+                {
+                    var existingConference = existingEntry.Conference;
+
+                    if (existingConference == null)
+                    {
+                        _context.Add(existingConference);
+                    }
+                    else
+                    {
+                        _context.Entry(existingConference).CurrentValues.SetValues(publication.Conference);
+                    }
+                }
+                else
+                {
+                    var existingConference = existingEntry.Conference;
+
+                    if (existingConference != null)
+                    {
+                        _context.Remove(existingConference);
+                    }
+                }
             }
-
-            _context.Update(publication);
-
+            
             return await _context.SaveChangesAsync();
         }
 
@@ -84,7 +147,7 @@ namespace DocumentApp.Infrastructure
             }
             else
             {
-                _context.Update(entry);
+                _context.Entry(existingEntry).CurrentValues.SetValues(entry);
             }
         }
 
