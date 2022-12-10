@@ -56,7 +56,7 @@ namespace DocumentApp.Infrastructure
 
         public async Task<int> UpdateAsync(Publication publication)
         {
-            Publication? existingEntry = await _context.FindAsync<Publication>(publication.Id);
+            var existingEntry = await GetByIdAsync(publication.Id);
 
             if (existingEntry != null)
             {
@@ -68,13 +68,14 @@ namespace DocumentApp.Infrastructure
                     
                     if (existingAuthor == null)
                     {
-                        _context.Add(author);
+                        existingEntry.Authors.Add(author);
                     }
                     else
                     {
                         _context.Entry(existingAuthor).CurrentValues.SetValues(author);
                     }
                 }
+
                 foreach (var existingAuthor in existingEntry.Authors)
                 {
                     if (!publication.Authors.Any(a => a.Id == existingAuthor.Id))
@@ -89,13 +90,14 @@ namespace DocumentApp.Infrastructure
                     
                     if (existingIndex == null)
                     {
-                        _context.Add(index);
+                        existingEntry.CitationIndices.Add(index);
                     }
                     else
                     {
                         _context.Entry(existingIndex).CurrentValues.SetValues(index);
                     }
                 }
+
                 foreach (var existingIndex in existingEntry.CitationIndices)
                 {
                     if (!publication.CitationIndices.Any(a => a.Id == existingIndex.Id))
@@ -110,7 +112,7 @@ namespace DocumentApp.Infrastructure
 
                     if (existingConference == null)
                     {
-                        _context.Add(existingConference);
+                        existingEntry.Conference = publication.Conference;
                     }
                     else
                     {
@@ -125,9 +127,9 @@ namespace DocumentApp.Infrastructure
                     {
                         _context.Remove(existingConference);
                     }
-                }
+                }    
             }
-            
+
             return await _context.SaveChangesAsync();
         }
 
