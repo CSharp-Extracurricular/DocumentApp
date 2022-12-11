@@ -56,78 +56,14 @@ namespace DocumentApp.Infrastructure
 
         public async Task<int> UpdateAsync(Publication publication)
         {
-            var existingEntry = await GetByIdAsync(publication.Id);
+            Publication? existingEntry = await GetByIdAsync(publication.Id);
 
             if (existingEntry != null)
             {
-                _context.Entry(existingEntry).CurrentValues.SetValues(publication);
-
-                foreach (var author in publication.Authors)
-                {
-                    var existingAuthor = existingEntry.Authors.FirstOrDefault(p => p.Id == author.Id);
-                    
-                    if (existingAuthor == null)
-                    {
-                        existingEntry.Authors.Add(author);
-                    }
-                    else
-                    {
-                        _context.Entry(existingAuthor).CurrentValues.SetValues(author);
-                    }
-                }
-
-                foreach (var existingAuthor in existingEntry.Authors)
-                {
-                    if (!publication.Authors.Any(a => a.Id == existingAuthor.Id))
-                    {
-                        _context.Remove(existingAuthor);
-                    }
-                }
-
-                foreach (var index in publication.CitationIndices)
-                {
-                    var existingIndex = existingEntry.CitationIndices.FirstOrDefault(p => p.Id == index.Id);
-                    
-                    if (existingIndex == null)
-                    {
-                        existingEntry.CitationIndices.Add(index);
-                    }
-                    else
-                    {
-                        _context.Entry(existingIndex).CurrentValues.SetValues(index);
-                    }
-                }
-
-                foreach (var existingIndex in existingEntry.CitationIndices)
-                {
-                    if (!publication.CitationIndices.Any(a => a.Id == existingIndex.Id))
-                    {
-                        _context.Remove(existingIndex);
-                    }
-                }
-
-                if (publication.Conference != null)
-                {
-                    var existingConference = existingEntry.Conference;
-
-                    if (existingConference == null)
-                    {
-                        existingEntry.Conference = publication.Conference;
-                    }
-                    else
-                    {
-                        _context.Entry(existingConference).CurrentValues.SetValues(publication.Conference);
-                    }
-                }
-                else
-                {
-                    var existingConference = existingEntry.Conference;
-
-                    if (existingConference != null)
-                    {
-                        _context.Remove(existingConference);
-                    }
-                }    
+                UpdateContextEntryValues(publication, existingEntry);
+                EnsureEntryInActualState(publication.Authors, existingEntry.Authors);
+                EnsureEntryInActualState(publication.CitationIndices, existingEntry.CitationIndices);
+                EnsureEntryInActualState(publication.Conference, existingEntry.Conference);
             }
 
             return await _context.SaveChangesAsync();
@@ -139,26 +75,76 @@ namespace DocumentApp.Infrastructure
             .Include(s => s.Conference)
             .OrderBy(p => p.Title);
 
-        private async Task EnsureEntryInContext<T>(T entry) where T : class, IIdentifiableT
+        private void EnsureEntryInActualState<T>(ICollection<T> actualEntryContainer, ICollection<T> existingEntryContainer) where T : class, IIdentifiableT
         {
-            T? existingEntry = await _context.FindAsync<T>(entry.Id);
+            EnsureEntryInContext(actualEntryContainer, existingEntryContainer);
+            EnsureNoOutdatedEntriesInContext(actualEntryContainer, existingEntryContainer);
+        }
 
-            if (existingEntry == null)
+        private void EnsureEntryInActualState<T>(T? actualEntry, T? existingEntry) where T : class, IIdentifiableT
+        {
+            if (actualEntry != null)
             {
-                await _context.AddAsync(entry);
+                EnsureEntryInContext(actualEntry, ref existingEntry);
+            }
+            else if (existingEntry != null)
+            {
+                RemoveEntryFromContext(existingEntry);
+            }
+        }
+
+        private void EnsureEntryInContext<T>(ICollection<T> actualEntryContainer, ICollection<T> existingEntryContainer) where T : class, IIdentifiableT
+        {
+            foreach (T element in actualEntryContainer)
+            {
+                EnsureEntryInContext(element, existingEntryContainer);
+            }
+        }
+
+        private void EnsureNoOutdatedEntriesInContext<T>(ICollection<T> actualEntryContainer, ICollection<T> existingEntryContainer) where T : class, IIdentifiableT
+        {
+            foreach (T existingEntry in existingEntryContainer)
+            {
+                RemoveEntryFromContextIfOutdated(existingEntry, actualEntryContainer);
+            }
+        }
+
+        private void EnsureEntryInContext<T>(T actualEntry, ref T? existingEntryRoot) where T : class
+        {
+            if (existingEntryRoot == null)
+            {
+                existingEntryRoot = actualEntry;
             }
             else
             {
-                _context.Entry(existingEntry).CurrentValues.SetValues(entry);
+                UpdateContextEntryValues(actualEntry, existingEntryRoot);
             }
         }
 
-        private async Task EnsureEntryInContext<T>(List<T> entry) where T : class, IIdentifiableT
+        private void EnsureEntryInContext<T>(T entry, ICollection<T> existingEntryContainer) where T : class, IIdentifiableT
         {
-            foreach (T element in entry)
+            T? existingEntry = existingEntryContainer.FirstOrDefault(p => p.Id == entry.Id);
+
+            if (existingEntry == null)
             {
-                await EnsureEntryInContext(element);
+                existingEntryContainer.Add(entry);
+            }
+            else
+            {
+                UpdateContextEntryValues(entry, existingEntry);
             }
         }
+
+        private void RemoveEntryFromContextIfOutdated<T>(T existingEntry, ICollection<T> actualEntryContainer) where T : class, IIdentifiableT
+        {
+            if (!actualEntryContainer.Any(a => a.Id == existingEntry.Id))
+            {
+                RemoveEntryFromContext(existingEntry);
+            }
+        }
+
+        private void RemoveEntryFromContext<T>(T existingEntry) where T : class => _context.Remove(existingEntry);
+
+        private void UpdateContextEntryValues<T>(T actual, T existing) where T : class => _context.Entry(existing).CurrentValues.SetValues(actual);
     }
 }
