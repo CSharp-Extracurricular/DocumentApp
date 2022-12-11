@@ -19,27 +19,22 @@ namespace DocumentApp.API.Controllers
 
         // GET: api/View
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PublicationDto>>> GetPublications() => await ProceedViewRequest();
+        public async Task<ActionResult<IEnumerable<PublicationDto>>> GetAllPublicationsAsync() => await ProceedViewRequest();
 
         // GET: api/View/filter/
         [HttpGet("filter/")]
-        public async Task<ActionResult<IEnumerable<PublicationDto>>> GetPulicationsWithFilter(int? startYear, int? endYear, PublicationType? type)
-            => await ProceedViewRequest(new PublicationQuery 
-                { 
-                    StartYear = startYear, 
-                    EndYear = endYear, 
-                    PublicationType = type 
-                });
+        public async Task<ActionResult<IEnumerable<PublicationDto>>> GetFilteredPublicationsAsync([FromQuery] PublicationQuery query)
+            => await ProceedViewRequest(query);
 
         // GET: api/View/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<PublicationDto>> GetPublication(Guid id) => await ProceedViewRequest(id);
+        public async Task<ActionResult<PublicationDto>> GetPublicationAsync(Guid id) => await ProceedViewRequest(id);
 
         [NonAction]
         private async Task<ActionResult<IEnumerable<PublicationDto>>> ProceedViewRequest(PublicationQuery? query = null)
         {
-            IEnumerable<Publication> result = query.HasValue 
-                ? await _publicationRepository.GetAllAsync(query.Value) 
+            IEnumerable<Publication> result = (query != null)
+                ? await _publicationRepository.GetAllAsync(query) 
                 : await _publicationRepository.GetAllAsync();
 
             return GetViewRequestResultFor(result);
@@ -58,7 +53,7 @@ namespace DocumentApp.API.Controllers
         {
             return collection.Any()
                 ? Ok(GetTranslatedResult(collection))
-                : NotFound();
+                : NoContent();
         }
 
         [NonAction]
@@ -66,7 +61,7 @@ namespace DocumentApp.API.Controllers
         {
             return (publication != null)
                 ? Ok(GetTranslatedResult(publication))
-                : NotFound();
+                : NoContent();
         }
 
         [NonAction]
@@ -83,6 +78,6 @@ namespace DocumentApp.API.Controllers
         }
 
         [NonAction]
-        private static PublicationDto GetTranslatedResult(Publication publication) => DtoConverter.Translate(publication);
+        private static PublicationDto GetTranslatedResult(Publication publication) => DtoConverter.Convert(publication);
     }
 }

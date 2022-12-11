@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using DocumentApp.Infrastructure;
-using DocumentApp.Domain;
-using DocumentApp.DTO; // Не удалять using.
+using DocumentApp.DTO;
 
 namespace DocumentApp.API.Controllers
 {
@@ -18,36 +17,36 @@ namespace DocumentApp.API.Controllers
 
         // PUT: api/Edit/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPublication(Guid id, Publication publication)
+        public async Task<IActionResult> PutPublication(Guid id, PublicationDto publicationDto)
         {
-            if (id != publication.Id)
+            if (id != publicationDto.Id)
             {
                 return BadRequest();
             }
 
-            if (!PublicationExists(id))
+            if (!await IsPublicationExist(id))
             {
                 return NotFound(id);
             }
 
-            await _publicationRepository.UpdateAsync(publication);
+            await _publicationRepository.UpdateAsync(DtoConverter.ConvertToNative(publicationDto));
 
             return NoContent();
         }
 
         // POST: api/Edit
         [HttpPost]
-        public async Task<ActionResult<Publication>> PostPublications(Publication publication)
+        public async Task<ActionResult<PublicationDto>> PostPublications(PublicationDto publicationDto)
         {
-            await _publicationRepository.AddAsync(publication);
-            return CreatedAtAction("GetPublications", new { id = publication.Id }, publication);
+            await _publicationRepository.AddAsync(DtoConverter.ConvertToNative(publicationDto));
+            return CreatedAtAction("GetAllPublicationsAsync", new { id = publicationDto.Id }, publicationDto);
         }
 
         // DELETE: api/Edit/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePublication(Guid id)
         {
-            if (!PublicationExists(id))
+            if (!await IsPublicationExist(id))
             {
                 return NotFound(id);
             }
@@ -57,6 +56,6 @@ namespace DocumentApp.API.Controllers
             return NoContent();
         }
 
-        private bool PublicationExists(Guid id) => _publicationRepository.GetByIdAsync(id) != null;
+        private async Task<bool> IsPublicationExist(Guid id) => await _publicationRepository.GetByIdAsync(id) != null;
     }
 }

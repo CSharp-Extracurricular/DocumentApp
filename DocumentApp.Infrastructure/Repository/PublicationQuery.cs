@@ -2,10 +2,12 @@
 
 namespace DocumentApp.Infrastructure
 {
-    public struct PublicationQuery
+    public class PublicationQuery
     {
-        public int? StartYear { get; set; }
-        public int? EndYear { get; set; }
-        public PublicationType? PublicationType { get; set; }
+        public int? StartYear { get; set; } = null;
+        public int? EndYear { get; set; } = null;
+        public PublicationType? PublicationType { get; set; } = null;
+
+        public PublicationQuery() { }
     }
 }
