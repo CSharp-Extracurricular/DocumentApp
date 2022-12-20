@@ -72,7 +72,7 @@ namespace DocumentApp.Tests
             OkObjectResult? okObjectResult = responseResult.Result as OkObjectResult;
             IEnumerable<PublicationDto>? responseResultValue = okObjectResult.Value as IEnumerable<PublicationDto>;
 
-            Assert.Equal(1, responseResultValue.Count());
+            Assert.Single(responseResultValue);
             PublicationDto thirdDto = DtoConverter.Convert(third);
             Assert.Equal(thirdDto, responseResultValue.First(), new PublicationsDtoEqualityComparer());
         }
@@ -124,7 +124,7 @@ namespace DocumentApp.Tests
             OkObjectResult? okObjectResult = responseResult.Result as OkObjectResult;
             IEnumerable<PublicationDto>? responseResultValue = okObjectResult.Value as IEnumerable<PublicationDto>;
 
-            Assert.Equal(1, responseResultValue.Count());
+            Assert.Single(responseResultValue);
             PublicationDto thirdDto = DtoConverter.Convert(third);
             Assert.Equal(thirdDto, responseResultValue.First(), new PublicationsDtoEqualityComparer());
         }
