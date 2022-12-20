@@ -22,7 +22,6 @@
                 return false;
             }
 
-            
             for (int i = 0, j = x.Count - 1; i < j; i++)
             {
                 if (!AreAuthorsEqual(x.ElementAt(i), y.ElementAt(i)))
@@ -53,7 +52,6 @@
             {
                 return false;
             }
-
 
             for (int i = 0, j = x.Count - 1; i < j; i++)
             {
