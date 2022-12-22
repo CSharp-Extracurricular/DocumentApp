@@ -38,7 +38,7 @@ namespace DocumentApp.Tests
 
             ActionResult<PublicationDto> responseResult = await EditController.PostPublications(publicationDto);
 
-            CreatedAtActionResult? okObjectResult = responseResult.Result as CreatedAtActionResult;
+            CreatedResult? okObjectResult = responseResult.Result as CreatedResult;
             PublicationDto responseResultValue = okObjectResult.Value as PublicationDto ?? null!;
 
             Assert.Equal(publicationDto, responseResultValue, new PublicationsDtoEqualityComparer());

@@ -39,7 +39,7 @@ namespace DocumentApp.API.Controllers
         public async Task<ActionResult<PublicationDto>> PostPublications(PublicationDto publicationDto)
         {
             await _publicationRepository.AddAsync(DtoConverter.ConvertToNative(publicationDto));
-            return CreatedAtAction("GetAllPublicationsAsync", new { id = publicationDto.Id }, publicationDto);
+            return Created($"/api/View/{publicationDto.Id}", publicationDto);
         }
 
         // DELETE: api/Edit/5

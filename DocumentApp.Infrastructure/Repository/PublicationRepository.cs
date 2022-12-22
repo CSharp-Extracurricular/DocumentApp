@@ -1,6 +1,5 @@
 ﻿using DocumentApp.Domain;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace DocumentApp.Infrastructure
 {
@@ -135,9 +134,9 @@ namespace DocumentApp.Infrastructure
             }
         }
 
-        private void RemoveEntryFromContextIfOutdated<T>(T existingEntry, ICollection<T> actualEntryContainer) where T : class, IIdentifiableT
+        private void RemoveEntryFromContextIfOutdated<T>(T existingEntry, IEnumerable<T> actualEntryContainer) where T : class, IIdentifiableT
         {
-            if (!actualEntryContainer.Any(a => a.Id == existingEntry.Id))
+            if (actualEntryContainer.All(a => a.Id != existingEntry.Id))
             {
                 RemoveEntryFromContext(existingEntry);
             }
