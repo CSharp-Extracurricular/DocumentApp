@@ -51,8 +51,10 @@ namespace DocumentApp.API.Controllers
         [NonAction]
         private ActionResult<IEnumerable<PublicationDto>> GetViewRequestResultFor(IEnumerable<Publication> collection)
         {
-            return collection.Any()
-                ? Ok(GetConvertedResult(collection))
+            IEnumerable<Publication> publications = collection.ToList();
+
+            return publications.Any()
+                ? Ok(GetConvertedResult(publications))
                 : NoContent();
         }
 
