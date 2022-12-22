@@ -11,9 +11,25 @@ namespace DocumentApp.Tests
 
         public EditControllerTest()
         {
-            TestHelper MainTestHelper = new();
-            TestRepository = MainTestHelper.TestRepository;
-            EditController = new EditController(MainTestHelper.TestRepository.UnitOfWork);
+            TestHelper mainTestHelper = new();
+            TestRepository = mainTestHelper.TestRepository;
+            EditController = new EditController(mainTestHelper.TestRepository.UnitOfWork);
+        }
+
+        [Fact]
+        public void CreateEditControllerTest()
+        {
+            EditController controller = new EditController(TestRepository.UnitOfWork);
+            Assert.NotNull(controller);
+        }
+
+        [Fact]
+        public void CreateEditControllerWithoutContextTest()
+        {
+            Assert.Throws<System.ArgumentNullException>(() =>
+            {
+                EditController controller = new EditController(null);
+            });
         }
 
         [Fact]

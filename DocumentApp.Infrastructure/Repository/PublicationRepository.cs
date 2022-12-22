@@ -53,7 +53,7 @@ namespace DocumentApp.Infrastructure
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> UpdateAsync(Publication publication)
+        public async Task UpdateAsync(Publication publication)
         {
             Publication? existingEntry = await GetByIdAsync(publication.Id);
 
@@ -65,7 +65,7 @@ namespace DocumentApp.Infrastructure
                 EnsureEntryInActualState(publication.Conference, existingEntry.Conference);
             }
 
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         private IQueryable<Publication> GetAllAsIQueryable() => _context.Publications

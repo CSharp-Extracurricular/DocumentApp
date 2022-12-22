@@ -13,7 +13,7 @@ namespace DocumentApp.API.Controllers
     {
         private readonly PublicationRepository _publicationRepository;
 
-        public EditController(Context context) => _publicationRepository = new PublicationRepository(context);
+        public EditController(Context context) => _publicationRepository = new PublicationRepository(context) ?? throw new ArgumentNullException(nameof(context));
 
         // PUT: api/Edit/5
         [HttpPut("{id}")]
