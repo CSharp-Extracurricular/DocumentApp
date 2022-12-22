@@ -19,16 +19,16 @@ namespace DocumentApp.Tests
         [Fact]
         public void CreateEditControllerTest()
         {
-            EditController controller = new EditController(TestRepository.UnitOfWork);
+            EditController controller = new(TestRepository.UnitOfWork);
             Assert.NotNull(controller);
         }
 
         [Fact]
         public void CreateEditControllerWithoutContextTest()
         {
-            Assert.Throws<System.ArgumentNullException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
             {
-                EditController controller = new EditController(null);
+                _ = new EditController(null!);
             });
         }
 
