@@ -52,7 +52,7 @@ namespace DocumentApp.API.Controllers
         private ActionResult<IEnumerable<PublicationDto>> GetViewRequestResultFor(IEnumerable<Publication> collection)
         {
             return collection.Any()
-                ? Ok(GetTranslatedResult(collection))
+                ? Ok(GetConvertedResult(collection))
                 : NoContent();
         }
 
@@ -60,24 +60,15 @@ namespace DocumentApp.API.Controllers
         private ActionResult<PublicationDto> GetViewRequestResultFor(Publication? publication)
         {
             return (publication != null)
-                ? Ok(GetTranslatedResult(publication))
+                ? Ok(GetConvertedResult(publication))
                 : NoContent();
         }
 
         [NonAction]
-        private static IEnumerable<PublicationDto> GetTranslatedResult(IEnumerable<Publication> collection)
-        {
-            List<PublicationDto> translatedResult = new();
-
-            foreach (Publication publication in collection)
-            {
-                translatedResult.Add(GetTranslatedResult(publication));
-            }
-
-            return translatedResult;
-        }
+        private static IEnumerable<PublicationDto> GetConvertedResult(IEnumerable<Publication> collection) => 
+            collection.Select(GetConvertedResult).ToList();
 
         [NonAction]
-        private static PublicationDto GetTranslatedResult(Publication publication) => DtoConverter.Convert(publication);
+        private static PublicationDto GetConvertedResult(Publication publication) => DtoConverter.Convert(publication);
     }
 }
