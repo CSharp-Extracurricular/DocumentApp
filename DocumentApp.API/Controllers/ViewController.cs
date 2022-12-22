@@ -27,7 +27,7 @@ namespace DocumentApp.API.Controllers
             => await ProceedViewRequest(query);
 
         // GET: api/View/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         public async Task<ActionResult<PublicationDto>> GetPublicationAsync(Guid id) => await ProceedViewRequest(id);
 
         [NonAction]

@@ -16,7 +16,7 @@ namespace DocumentApp.API.Controllers
         public EditController(Context context) => _publicationRepository = new PublicationRepository(context) ?? throw new ArgumentNullException(nameof(context));
 
         // PUT: api/Edit/5
-        [HttpPut("{id}")]
+        [HttpPut("{id:guid}")]
         public async Task<IActionResult> PutPublication(Guid id, PublicationDto publicationDto)
         {
             if (id != publicationDto.Id)
@@ -43,7 +43,7 @@ namespace DocumentApp.API.Controllers
         }
 
         // DELETE: api/Edit/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeletePublication(Guid id)
         {
             if (!await IsPublicationExist(id))
