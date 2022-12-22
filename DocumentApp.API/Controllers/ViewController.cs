@@ -19,15 +19,21 @@ namespace DocumentApp.API.Controllers
 
         // GET: api/View
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PublicationDto>))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult<IEnumerable<PublicationDto>>> GetAllPublicationsAsync() => await ProceedViewRequest();
 
         // GET: api/View/filter/
         [HttpGet("filter/")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PublicationDto>))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult<IEnumerable<PublicationDto>>> GetFilteredPublicationsAsync([FromQuery] PublicationQuery query)
             => await ProceedViewRequest(query);
 
         // GET: api/View/5
         [HttpGet("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PublicationDto))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult<PublicationDto>> GetPublicationAsync(Guid id) => await ProceedViewRequest(id);
 
         [NonAction]
