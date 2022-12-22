@@ -15,18 +15,13 @@ namespace DocumentApp.API.Controllers
 
         public EditController(Context context) => _publicationRepository = new PublicationRepository(context) ?? throw new ArgumentNullException(nameof(context));
 
-        // PUT: api/Edit/5
-        [HttpPut("{id:guid}")]
-        public async Task<IActionResult> PutPublication(Guid id, PublicationDto publicationDto)
+        // PUT: api/Edit
+        [HttpPut]
+        public async Task<IActionResult> PutPublication(PublicationDto publicationDto)
         {
-            if (id != publicationDto.Id)
+            if (!await IsPublicationExist(publicationDto.Id))
             {
-                return BadRequest();
-            }
-
-            if (!await IsPublicationExist(id))
-            {
-                return NotFound(id);
+                return NotFound(publicationDto.Id);
             }
 
             await _publicationRepository.UpdateAsync(DtoConverter.ConvertToNative(publicationDto));

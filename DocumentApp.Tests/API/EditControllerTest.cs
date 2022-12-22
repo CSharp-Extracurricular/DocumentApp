@@ -40,7 +40,7 @@ namespace DocumentApp.Tests
 
             publication.Title = "Changed.";
             PublicationDto publicationDto = DtoConverter.Convert(publication);
-            IActionResult responseResult = await EditController.PutPublication(publication.Id, publicationDto);
+            IActionResult responseResult = await EditController.PutPublication(publicationDto);
 
             Assert.IsType<NoContentResult>(responseResult);
             Assert.Equal(publication, await TestRepository.GetByIdAsync(publication.Id) ?? null!, new PublicationsEqualityComparer());
