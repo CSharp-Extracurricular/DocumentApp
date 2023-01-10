@@ -36,7 +36,7 @@ namespace DocumentApp.Infrastructure
 
         public async Task<Publication?> GetByIdAsync(Guid id) => await _context.Publications
             .Where(a => a.Id == id)
-            .Include(s => s.Authors)
+            .Include(s => s.Authors.OrderBy(a => a.Number))
             .Include(s => s.CitationIndices)
             .Include(s => s.Conference)
             .FirstOrDefaultAsync();
