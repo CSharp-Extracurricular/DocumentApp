@@ -1,6 +1,5 @@
 ﻿using DocumentApp.Domain;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace DocumentApp.Infrastructure
 {
@@ -54,7 +53,7 @@ namespace DocumentApp.Infrastructure
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> UpdateAsync(Publication publication)
+        public async Task UpdateAsync(Publication publication)
         {
             Publication? existingEntry = await GetByIdAsync(publication.Id);
 
@@ -66,11 +65,11 @@ namespace DocumentApp.Infrastructure
                 EnsureEntryInActualState(publication.Conference, existingEntry.Conference);
             }
 
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         private IQueryable<Publication> GetAllAsIQueryable() => _context.Publications
-            .Include(s => s.Authors)
+            .Include(s => s.Authors.OrderBy(a => a.Number))
             .Include(s => s.CitationIndices)
             .Include(s => s.Conference)
             .OrderBy(p => p.Title);
@@ -135,9 +134,9 @@ namespace DocumentApp.Infrastructure
             }
         }
 
-        private void RemoveEntryFromContextIfOutdated<T>(T existingEntry, ICollection<T> actualEntryContainer) where T : class, IIdentifiableT
+        private void RemoveEntryFromContextIfOutdated<T>(T existingEntry, IEnumerable<T> actualEntryContainer) where T : class, IIdentifiableT
         {
-            if (!actualEntryContainer.Any(a => a.Id == existingEntry.Id))
+            if (actualEntryContainer.All(a => a.Id != existingEntry.Id))
             {
                 RemoveEntryFromContext(existingEntry);
             }

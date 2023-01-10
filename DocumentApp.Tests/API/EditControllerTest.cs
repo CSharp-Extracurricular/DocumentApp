@@ -11,9 +11,25 @@ namespace DocumentApp.Tests
 
         public EditControllerTest()
         {
-            TestHelper MainTestHelper = new();
-            TestRepository = MainTestHelper.TestRepository;
-            EditController = new EditController(MainTestHelper.TestRepository.UnitOfWork);
+            TestHelper mainTestHelper = new();
+            TestRepository = mainTestHelper.TestRepository;
+            EditController = new EditController(mainTestHelper.TestRepository.UnitOfWork);
+        }
+
+        [Fact]
+        public void CreateEditControllerTest()
+        {
+            EditController controller = new(TestRepository.UnitOfWork);
+            Assert.NotNull(controller);
+        }
+
+        [Fact]
+        public void CreateEditControllerWithoutContextTest()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                _ = new EditController(null!);
+            });
         }
 
         [Fact]
@@ -24,7 +40,7 @@ namespace DocumentApp.Tests
 
             publication.Title = "Changed.";
             PublicationDto publicationDto = DtoConverter.Convert(publication);
-            IActionResult responseResult = await EditController.PutPublication(publication.Id, publicationDto);
+            IActionResult responseResult = await EditController.PutPublication(publicationDto);
 
             Assert.IsType<NoContentResult>(responseResult);
             Assert.Equal(publication, await TestRepository.GetByIdAsync(publication.Id) ?? null!, new PublicationsEqualityComparer());
@@ -38,7 +54,7 @@ namespace DocumentApp.Tests
 
             ActionResult<PublicationDto> responseResult = await EditController.PostPublications(publicationDto);
 
-            CreatedAtActionResult? okObjectResult = responseResult.Result as CreatedAtActionResult;
+            CreatedResult? okObjectResult = responseResult.Result as CreatedResult;
             PublicationDto responseResultValue = okObjectResult.Value as PublicationDto ?? null!;
 
             Assert.Equal(publicationDto, responseResultValue, new PublicationsDtoEqualityComparer());

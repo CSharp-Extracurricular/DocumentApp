@@ -19,15 +19,21 @@ namespace DocumentApp.API.Controllers
 
         // GET: api/View
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PublicationDto>))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult<IEnumerable<PublicationDto>>> GetAllPublicationsAsync() => await ProceedViewRequest();
 
         // GET: api/View/filter/
         [HttpGet("filter/")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PublicationDto>))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult<IEnumerable<PublicationDto>>> GetFilteredPublicationsAsync([FromQuery] PublicationQuery query)
             => await ProceedViewRequest(query);
 
         // GET: api/View/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PublicationDto))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult<PublicationDto>> GetPublicationAsync(Guid id) => await ProceedViewRequest(id);
 
         [NonAction]
@@ -51,8 +57,10 @@ namespace DocumentApp.API.Controllers
         [NonAction]
         private ActionResult<IEnumerable<PublicationDto>> GetViewRequestResultFor(IEnumerable<Publication> collection)
         {
-            return collection.Any()
-                ? Ok(GetTranslatedResult(collection))
+            IEnumerable<Publication> publications = collection.ToList();
+
+            return publications.Any()
+                ? Ok(GetConvertedResult(publications))
                 : NoContent();
         }
 
@@ -60,24 +68,15 @@ namespace DocumentApp.API.Controllers
         private ActionResult<PublicationDto> GetViewRequestResultFor(Publication? publication)
         {
             return (publication != null)
-                ? Ok(GetTranslatedResult(publication))
+                ? Ok(GetConvertedResult(publication))
                 : NoContent();
         }
 
         [NonAction]
-        private static IEnumerable<PublicationDto> GetTranslatedResult(IEnumerable<Publication> collection)
-        {
-            List<PublicationDto> translatedResult = new();
-
-            foreach (Publication publication in collection)
-            {
-                translatedResult.Add(GetTranslatedResult(publication));
-            }
-
-            return translatedResult;
-        }
+        private static IEnumerable<PublicationDto> GetConvertedResult(IEnumerable<Publication> collection) => 
+            collection.Select(GetConvertedResult).ToList();
 
         [NonAction]
-        private static PublicationDto GetTranslatedResult(Publication publication) => DtoConverter.Convert(publication);
+        private static PublicationDto GetConvertedResult(Publication publication) => DtoConverter.Convert(publication);
     }
 }

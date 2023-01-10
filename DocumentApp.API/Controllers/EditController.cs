@@ -13,20 +13,15 @@ namespace DocumentApp.API.Controllers
     {
         private readonly PublicationRepository _publicationRepository;
 
-        public EditController(Context context) => _publicationRepository = new PublicationRepository(context);
+        public EditController(Context context) => _publicationRepository = new PublicationRepository(context) ?? throw new ArgumentNullException(nameof(context));
 
-        // PUT: api/Edit/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPublication(Guid id, PublicationDto publicationDto)
+        // PUT: api/Edit
+        [HttpPut]
+        public async Task<IActionResult> PutPublication(PublicationDto publicationDto)
         {
-            if (id != publicationDto.Id)
+            if (!await IsPublicationExist(publicationDto.Id))
             {
-                return BadRequest();
-            }
-
-            if (!await IsPublicationExist(id))
-            {
-                return NotFound(id);
+                return NotFound(publicationDto.Id);
             }
 
             await _publicationRepository.UpdateAsync(DtoConverter.ConvertToNative(publicationDto));
@@ -39,11 +34,11 @@ namespace DocumentApp.API.Controllers
         public async Task<ActionResult<PublicationDto>> PostPublications(PublicationDto publicationDto)
         {
             await _publicationRepository.AddAsync(DtoConverter.ConvertToNative(publicationDto));
-            return CreatedAtAction("GetAllPublicationsAsync", new { id = publicationDto.Id }, publicationDto);
+            return Created($"/api/View/{publicationDto.Id}", publicationDto);
         }
 
         // DELETE: api/Edit/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeletePublication(Guid id)
         {
             if (!await IsPublicationExist(id))
