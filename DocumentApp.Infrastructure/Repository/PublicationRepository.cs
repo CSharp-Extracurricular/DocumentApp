@@ -69,7 +69,7 @@ namespace DocumentApp.Infrastructure
         }
 
         private IQueryable<Publication> GetAllAsIQueryable() => _context.Publications
-            .Include(s => s.Authors)
+            .Include(s => s.Authors.OrderBy(a => a.Number))
             .Include(s => s.CitationIndices)
             .Include(s => s.Conference)
             .OrderBy(p => p.Title);
