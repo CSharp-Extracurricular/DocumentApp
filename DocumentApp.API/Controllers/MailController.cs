@@ -7,12 +7,14 @@ namespace DocumentApp.API.Controllers
     [ApiController]
     public class MailController : ControllerBase
     {
-        private readonly Mailer _mailer = new("", "", true, 587);
+        private readonly Mailer _mailer = new("", "", true);
 
         [HttpPost]
-        public void Send(MailAddress receiverAddress)
+        public async Task Send(MailAddress receiverAddress, Guid publicationId)
         {
-
+            string publicationUri = $"https://localhost:7204/api/View/{publicationId}";
+            string link = $"https://localhost:7204/api/Import/{publicationUri}";
+            await _mailer.SendImportLinkTo(receiverAddress, new Uri(link));
         }
     }
 }
