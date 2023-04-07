@@ -1,4 +1,5 @@
 ﻿using DocumentApp.Domain;
+using DocumentApp.DTO;
 using DocumentApp.Infrastructure;
 
 namespace DocumentApp.API
@@ -21,7 +22,7 @@ namespace DocumentApp.API
 
         public async Task ImportAsync()
         {
-            Publication? publication = await ProceedGetRequestAsync();
+            Publication? publication = DtoConverter.ConvertToNative(await ProceedGetRequestAsync() ?? null!);
 
             await ImportPublicationIfNotNullAsync(publication);
         }
@@ -32,10 +33,8 @@ namespace DocumentApp.API
             {
                 throw new Exception($"Error: Publication not found on request URI: {_exporterUri}");
             }
-            else
-            {
-                await EnsurePublicationInContextAsync(publication);
-            }
+
+            await EnsurePublicationInContextAsync(publication);
         }
 
         private async Task EnsurePublicationInContextAsync(Publication publication)
@@ -44,7 +43,7 @@ namespace DocumentApp.API
             await _publicationRepository.UpdateAsync(publication);
         }
 
-        private async Task<Publication?> ProceedGetRequestAsync() 
-            => await _httpClient.GetFromJsonAsync<Publication?>(_exporterUri) ?? null!;
+        private async Task<PublicationDto?> ProceedGetRequestAsync() 
+            => await _httpClient.GetFromJsonAsync<PublicationDto?>(_exporterUri) ?? null!;
     }
 }
