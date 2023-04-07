@@ -1,4 +1,4 @@
-﻿using System.Net.Mail;
+﻿using MimeKit;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocumentApp.API.Controllers
@@ -7,10 +7,10 @@ namespace DocumentApp.API.Controllers
     [ApiController]
     public class MailController : ControllerBase
     {
-        private readonly Mailer _mailer = new("", "", true);
+        private readonly Mailer _mailer = new("", "");
 
         [HttpPost]
-        public async Task Send(MailAddress receiverAddress, Guid publicationId)
+        public async Task Send(MailboxAddress receiverAddress, Guid publicationId)
         {
             string publicationUri = $"https://localhost:7204/api/View/{publicationId}";
             string link = $"https://localhost:7204/api/Import/{publicationUri}";
