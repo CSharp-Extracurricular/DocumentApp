@@ -1,20 +1,18 @@
 ﻿using MimeKit;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DocumentApp.API.Controllers
-{
-    [Route("api/[controller]")]
-    [ApiController]
-    public class MailController : ControllerBase
-    {
-        private readonly Mailer _mailer = new("", "");
+namespace DocumentApp.API.Controllers;
 
-        [HttpPost]
-        public async Task Send(MailboxAddress receiverAddress, Guid publicationId)
-        {
-            string publicationUri = $"https://localhost:7204/api/View/{publicationId}";
-            string link = $"https://localhost:7204/api/Import/{publicationUri}";
-            await _mailer.SendImportLinkTo(receiverAddress, new Uri(link));
-        }
+[Route("api/[controller]")]
+[ApiController]
+public class MailController : ControllerBase
+{
+    private readonly Mailer _mailer = new("", "");
+
+    [HttpPost]
+    public async Task Send(MailboxAddress receiverAddress, Guid publicationId)
+    {
+        string link = $"https://localhost:7204/api/View/{publicationId}";
+        await _mailer.SendImportLinkTo(receiverAddress, new Uri(link));
     }
 }

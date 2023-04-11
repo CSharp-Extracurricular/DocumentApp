@@ -24,22 +24,20 @@ public class Mailer
             }
         };
 
-        using (SmtpClient client = new())
-        {
-            await client.ConnectAsync(MailerSettings.Server, _settings.Port);
-            await client.AuthenticateAsync(_settings.Username, _settings.Password);
-            await client.SendAsync(message);
-            await client.DisconnectAsync(true);
-        }
+        using SmtpClient client = new();
+        await client.ConnectAsync(MailerSettings.Server, MailerSettings.Port);
+        await client.AuthenticateAsync(_settings.Username, _settings.Password);
+        await client.SendAsync(message);
+        await client.DisconnectAsync(true);
     }
 }
 
 public struct MailerSettings
 {
     public const string Server = "smtp.gmail.com";
-    public int Port = 587;
-    public string Username;
-    public string Password;
+    public const int Port = 587;
+    public readonly string Username;
+    public readonly string Password;
 
     public MailerSettings(string username, string password)
     {
