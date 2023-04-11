@@ -26,7 +26,7 @@ public class ImportController : ControllerBase
     {
         try
         {
-            Uri uriParsed = new(HttpUtility.UrlDecode(uri));
+            Uri uriParsed = uri.Contains("%") ? new Uri(HttpUtility.UrlDecode(uri)) : new Uri(uri);
             Importer importer = new(uriParsed, _context, _security.GetUserId());
             await importer.ImportAsync();
 
