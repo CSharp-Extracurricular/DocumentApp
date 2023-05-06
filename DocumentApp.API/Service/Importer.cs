@@ -22,7 +22,8 @@ namespace DocumentApp.API
 
         public async Task ImportAsync()
         {
-            Publication? publication = DtoConverter.ConvertToNative(await ProceedGetRequestAsync() ?? null!);
+            PublicationDto? result = await ProceedGetRequestAsync();
+            Publication? publication = DtoConverter.ConvertToNative(result);
 
             await ImportPublicationIfNotNullAsync(publication);
         }
@@ -40,10 +41,10 @@ namespace DocumentApp.API
         private async Task EnsurePublicationInContextAsync(Publication publication)
         {
             publication.UserId = _personId;
-            await _publicationRepository.UpdateAsync(publication);
+            await _publicationRepository.AddAsync(publication);
         }
 
         private async Task<PublicationDto?> ProceedGetRequestAsync() 
-            => await _httpClient.GetFromJsonAsync<PublicationDto?>(_exporterUri) ?? null!;
+            => await _httpClient.GetFromJsonAsync<PublicationDto?>(_exporterUri);
     }
 }
