@@ -25,6 +25,8 @@
         // Идентификатор создателя записи.
         public Guid UserId { get; set; }
 
+        public Uri? ImportUri { get; set; }
+
         public List<Author> Authors { get; set; } = new List<Author>();
         public List<CitationIndex> CitationIndices { get; set; } = new List<CitationIndex>();
         public Conference? Conference { get; set; }

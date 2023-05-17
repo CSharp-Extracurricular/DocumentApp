@@ -1,6 +1,7 @@
 ﻿using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using DocumentApp.Infrastructure;
+using DocumentApp.Domain;
 
 namespace DocumentApp.API.Controllers;
 
@@ -26,7 +27,7 @@ public class ImportController : ControllerBase
     {
         try
         {
-            Uri uriParsed = uri.Contains('%') ? new Uri(HttpUtility.UrlDecode(uri)) : new Uri(uri);
+            Uri uriParsed = new(uri.Contains('%') ? HttpUtility.UrlDecode(uri) : uri);
             Importer importer = new(uriParsed, _context, _security.GetUserId());
             await importer.ImportAsync();
 
@@ -36,5 +37,20 @@ public class ImportController : ControllerBase
         {
             return NotFound(exception.Message);
         }
+    }
+
+    // GET api/Import/update/5
+    [HttpGet("update/{id:guid}")]
+    public async Task<IActionResult> UpdatePublicationFromImportId(Guid id)
+    {
+        PublicationRepository publicationRepository = new (_context);
+        Publication? publication = await publicationRepository.GetByIdAsync(id);
+
+        if (publication != null && publication.ImportUri != null)
+        {
+            _ = await GetPublication(publication.ImportUri.ToString());
+        }
+
+        return NoContent();
     }
 }
