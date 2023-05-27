@@ -15,7 +15,8 @@ namespace DocumentApp.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PublishingYear = table.Column<int>(type: "int", nullable: false),
-                    PublicationType = table.Column<int>(type: "int", nullable: false)
+                    PublicationType = table.Column<int>(type: "int", nullable: false),
+                    PublicationStatus = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

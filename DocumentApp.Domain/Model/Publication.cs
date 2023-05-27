@@ -9,12 +9,23 @@
         Thesis
     }
 
+    public enum PublicationStatus
+    {
+        Черновик,
+        Отправлено,
+        Доработка,
+        Принято,
+        Опубликовано
+    }
+
     public class Publication : IIdentifiableT
     {
         public Guid Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public int PublishingYear { get; set; }
         public PublicationType PublicationType { get; set; }
+
+        public PublicationStatus PublicationStatus { get; set; }
 
         // Цифровой идентификатор объекта.
         public string DOI { get; set; } = string.Empty;

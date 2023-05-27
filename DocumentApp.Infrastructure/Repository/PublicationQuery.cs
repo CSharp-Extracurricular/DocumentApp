@@ -7,7 +7,7 @@ namespace DocumentApp.Infrastructure
         public int? StartYear { get; set; } = null;
         public int? EndYear { get; set; } = null;
         public PublicationType? PublicationType { get; set; } = null;
-
+        public PublicationStatus? PublicationStatus { get; set; } = null;
         public PublicationQuery() { }
     }
 }

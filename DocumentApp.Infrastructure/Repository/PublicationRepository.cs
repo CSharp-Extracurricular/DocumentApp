@@ -31,6 +31,10 @@ namespace DocumentApp.Infrastructure
                 result = result.Where(a => a.PublicationType == filtrationQuery.PublicationType);
             }
 
+            if (filtrationQuery.PublicationStatus != null)
+            {
+                result = result.Where(a => a.PublicationStatus == filtrationQuery.PublicationStatus);
+            }
             return await result.ToListAsync();
         }
 

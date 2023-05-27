@@ -22,6 +22,14 @@
                 PublishingYear = 1994
             };
 
+            Publication publication3 = new()
+            {
+                Id = FirstPublicationId,
+                Title = "Test case",
+                PublicationStatus = PublicationStatus.Черновик,
+                PublishingYear = 1994
+            };
+
             Author author1_1 = new()
             {
                 FirstName = "Test case 1",
@@ -74,6 +82,14 @@
                 Id = SecondPublicationId,
                 Title = "Test case 1",
                 PublicationType = PublicationType.Monography,
+                PublishingYear = 1994
+            };
+
+            Publication publication4 = new()
+            {
+                Id = FirstPublicationId,
+                Title = "Test case",
+                PublicationStatus = PublicationStatus.Черновик,
                 PublishingYear = 1994
             };
 

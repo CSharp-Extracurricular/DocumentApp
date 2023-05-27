@@ -142,6 +142,9 @@ namespace DocumentApp.Infrastructure.Migrations
                     b.Property<int>("PublicationType")
                         .HasColumnType("int");
 
+                    b.Property<int>("PublicationStatus")
+                        .HasColumnType("int");
+
                     b.Property<int>("PublishingYear")
                         .HasColumnType("int");
 

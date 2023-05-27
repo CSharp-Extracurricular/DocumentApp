@@ -9,6 +9,8 @@ namespace DocumentApp.DTO
         public int PublishingYear { get; set; }
         public PublicationType PublicationType { get; set; }
 
+        public PublicationStatus PublicationStatus { get; set; }
+
         // Цифровой идентификатор объекта.
         public string DOI { get; set; } = string.Empty;
 

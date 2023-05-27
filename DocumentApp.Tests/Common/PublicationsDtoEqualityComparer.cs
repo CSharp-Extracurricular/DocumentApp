@@ -10,6 +10,7 @@ namespace DocumentApp.Tests
                 x.Id == y.Id
                 && x.PublishingYear == y.PublishingYear
                 && x.PublicationType == y.PublicationType
+                && x.PublicationStatus == y.PublicationStatus
                 && x.Title == y.Title
                 && x.AuthorGroupId == y.AuthorGroupId
                 && IsAuthorsListEqual(x.Authors, y.Authors)
