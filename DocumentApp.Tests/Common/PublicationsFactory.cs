@@ -26,7 +26,7 @@
             {
                 Id = FirstPublicationId,
                 Title = "Test case",
-                PublicationStatus = PublicationStatus.Черновик,
+                PublicationStatus = PublicationStatus.Draft,
                 PublishingYear = 1994
             };
 
@@ -89,7 +89,7 @@
             {
                 Id = FirstPublicationId,
                 Title = "Test case",
-                PublicationStatus = PublicationStatus.Черновик,
+                PublicationStatus = PublicationStatus.Draft,
                 PublishingYear = 1994
             };
 
@@ -140,7 +140,7 @@
             publication2.CitationIndices.Add(index2);
             publication2.Conference = conference2;
 
-            Publication publication3 = new()
+            Publication publication5 = new()
             {
                 Id = ThirdPublicationId,
                 Title = "Test case 2",

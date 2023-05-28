@@ -11,11 +11,11 @@
 
     public enum PublicationStatus
     {
-        Черновик,
-        Отправлено,
-        Доработка,
-        Принято,
-        Опубликовано
+        Draft,
+        Sent,
+        Finalizing,
+        Accepted,
+        Published
     }
 
     public class Publication : IIdentifiableT
